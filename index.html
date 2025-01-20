@@ -4,54 +4,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مصبنة مشاء الله - دخول</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
         body {
             font-family: 'Tajawal', sans-serif;
             direction: rtl;
-            background-color: #e6f2ff; /* لون أزرق فاتح */
+            background: linear-gradient(to right, #e6f2ff, #b3d9ff);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
         }
         .login-container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
             text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .login-container h2 {
-            color: #004080; /* لون أزرق داكن */
+            color: #004080;
+            margin-bottom: 20px;
         }
         input[type="password"] {
             width: 100%;
-            padding: 10px;
+            padding: 15px;
             margin: 10px 0;
-            border: 1px solid #007bff;
-            border-radius: 5px;
+            border: 2px solid #007bff;
+            border-radius: 25px;
+            background-color: #e6f2ff;
+            color: #333;
+            font-size: 16px;
+        }
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #0056b3;
         }
         button {
             width: 100%;
-            padding: 10px;
-            background-color: #007bff; /* لون أزرق رئيسي */
+            padding: 15px;
+            background-color: #007bff;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 25px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            font-size: 18px;
         }
         button:hover {
             background-color: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .emoji {
+            font-size: 24px;
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>أدخل الكود للدخول</h2>
+    <div class="login-container animate__animated animate__fadeInDown">
+        <h2><span class="emoji">🔑</span> أدخل الكود للدخول</h2>
         <input type="password" id="accessCode" placeholder="الكود مثل: 202501">
-        <button onclick="checkAccessCode()">دخول</button>
+        <button onclick="checkAccessCode()">دخول <span class="emoji">➡️</span></button>
     </div>
 
     <script>
