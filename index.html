@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مصبنة مشاء الله - دخول</title>
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            direction: rtl;
+            background-color: #e6f2ff; /* لون أزرق فاتح */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .login-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .login-container h2 {
+            color: #004080; /* لون أزرق داكن */
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #007bff;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff; /* لون أزرق رئيسي */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>أدخل الكود للدخول</h2>
+        <input type="password" id="accessCode" placeholder="الكود مثل: 202501">
+        <button onclick="checkAccessCode()">دخول</button>
+    </div>
+
+    <script>
+        function checkAccessCode() {
+            const code = document.getElementById('accessCode').value;
+            if (code === "202501") {
+                window.location.href = 'customer.html';
+            } else {
+                alert('كود غير صحيح');
+            }
+        }
+    </script>
+</body>
+</html>
