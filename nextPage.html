@@ -19,6 +19,16 @@
       border-radius: 12px;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
       overflow: hidden;
+      animation: oscillate 2s ease-in-out infinite;
+    }
+
+    @keyframes oscillate {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      50% {
+        transform: translateX(5px);
+      }
     }
 
     .header {
@@ -111,7 +121,6 @@
     <div class="header">فاتورة الطلب</div>
 
     <div class="invoice-details">
-      <div>اسم الزبون: <span id="customerName">--</span></div>
       <div>التاريخ: <span id="invoiceDate">--</span></div>
       <div>رقم الفاتورة: <span id="invoiceNumber">--</span></div>
     </div>
@@ -143,14 +152,17 @@
   </div>
 
   <script>
-    // بيانات افتراضية للتجربة
+    // الاحتفاظ بالرقم التسلسلي دائمًا
+    if (!localStorage.getItem("invoiceNumber")) {
+      const generatedNumber = Math.floor(1000 + Math.random() * 9000); // رقم عشوائي
+      localStorage.setItem("invoiceNumber", generatedNumber);
+    }
+
     const selectedItems = JSON.parse(localStorage.getItem("selectedItems")) || [];
-    const customerName = localStorage.getItem("customerName") || "الزبون غير معروف";
-    const invoiceNumber = Math.floor(1000 + Math.random() * 9000); // رقم فاتورة عشوائي
+    const invoiceNumber = localStorage.getItem("invoiceNumber");
     const invoiceDate = new Date().toLocaleDateString();
 
     // عرض البيانات في الصفحة
-    document.getElementById("customerName").textContent = customerName;
     document.getElementById("invoiceDate").textContent = invoiceDate;
     document.getElementById("invoiceNumber").textContent = invoiceNumber;
 
@@ -184,4 +196,4 @@
     }
   </script>
 </body>
-  </html>
+</html>
