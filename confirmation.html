@@ -1,15 +1,238 @@
-function confirmPayment() {
-  if (!paymentType) {
-    alert("من فضلك اختر نوع الدفع أولًا.");
-    return;
-  }
-  if (paymentType === 'كلي') {
-    alert("تم الدفع بالكامل. سيتم الانتقال إلى صفحة التأكيد.");
-    window.location.href = "confirmation.html"; // الانتقال إلى صفحة التأكيد بعد الدفع الكامل
-  } else if (paymentType === 'جزئي' && partialAmount > 0) {
-    alert("تم الدفع جزئيًا. سيتم الانتقال إلى صفحة التأكيد.");
-    window.location.href = "confirmation.html"; // الانتقال إلى صفحة التأكيد بعد الدفع الجزئي
-  } else {
-    alert("من فضلك أدخل المبلغ المدفوع مسبقًا.");
-  }
-}
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>تأكيد الدفع - مصبنة مشاء الله</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+
+    .confirmation-container {
+      max-width: 800px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .header {
+      background-color: #007bff;
+      color: white;
+      padding: 20px;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .message {
+      padding: 20px;
+      font-size: 20px;
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .store-name {
+      font-size: 22px;
+      font-weight: bold;
+      color: #007bff;
+      margin: 20px 0;
+      text-transform: uppercase;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    th, td {
+      text-align: center;
+      padding: 12px;
+      font-size: 16px;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+      border-bottom: 3px solid #ddd;
+    }
+
+    td {
+      background-color: #f9f9f9;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .payment-status {
+      font-size: 18px;
+      font-weight: bold;
+      color: #fff;
+      padding: 8px 15px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    .paid {
+      background-color: #28a745; /* الأخضر */
+    }
+
+    .pending {
+      background-color: #dc3545; /* الأحمر */
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 12px 25px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      padding: 10px;
+      background-color: #e3f2fd;
+    }
+
+    .search-container {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: 250px;
+      margin-right: 10px;
+    }
+
+    button[type="submit"] {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="confirmation-container">
+    <div class="header">تأكيد الدفع - مصبنة مشاء الله</div>
+
+    <div class="message">
+      شكراً على اختيارك مصبنة مشاء الله! تم تسجيل طلبك بنجاح.
+    </div>
+
+    <div class="store-name">
+      مصبنة مشاء الله
+    </div>
+
+    <table class="invoice-table">
+      <thead>
+        <tr>
+          <th>رقم الفاتورة</th>
+          <th>تاريخ الفاتورة</th>
+          <th>حالة الدفع</th>
+        </tr>
+      </thead>
+      <tbody id="invoiceDetails">
+        <!-- سيتم إضافة التفاصيل هنا تلقائيًا -->
+      </tbody>
+    </table>
+
+    <div class="search-container">
+      <input type="text" id="searchInvoiceNumber" placeholder="أدخل رقم الفاتورة للبحث">
+      <button type="submit" onclick="searchInvoice()">بحث</button>
+    </div>
+
+    <div class="buttons">
+      <button onclick="logout()">🔚 الخروج</button>
+    </div>
+  </div>
+
+  <div class="footer">
+    © 2025 مصبنة مشاء الله - جميع الحقوق محفوظة
+  </div>
+
+  <script>
+    // استرجاع تفاصيل الفاتورة من localStorage
+    const invoiceNumber = localStorage.getItem("invoiceNumber");
+    const invoiceDate = localStorage.getItem("invoiceDate");
+    const totalAmount = parseFloat(localStorage.getItem("totalAmount")) || 0;
+    const partialAmount = parseFloat(localStorage.getItem("partialAmount")) || 0;
+    const paymentStatus = (partialAmount >= totalAmount) ? "كامل" : "جزئي";
+
+    // تحديث حالة الدفع
+    let paymentStatusClass = (paymentStatus === "كامل") ? "paid" : "pending";
+    let paymentStatusText = (paymentStatus === "كامل") ? "تم الدفع بالكامل" : `تم دفع جزئي - المبلغ المتبقي: ${totalAmount - partialAmount} درهم`;
+
+    // إضافة التفاصيل إلى الجدول
+    document.getElementById("invoiceDetails").innerHTML = `
+      <tr>
+        <td>${invoiceNumber}</td>
+        <td>${invoiceDate}</td>
+        <td><span class="payment-status ${paymentStatusClass}">${paymentStatusText}</span></td>
+      </tr>
+    `;
+
+    // وظيفة البحث عن الفاتورة
+    function searchInvoice() {
+      const searchNumber = document.getElementById("searchInvoiceNumber").value;
+      if (searchNumber === invoiceNumber) {
+        alert("تم العثور على الفاتورة");
+        // هنا يمكن إضافة عرض الفاتورة بالتفاصيل
+      } else {
+        alert("رقم الفاتورة غير موجود.");
+      }
+    }
+
+    // وظيفة الخروج
+    function logout() {
+      localStorage.clear();  // مسح بيانات الفاتورة من localStorage
+      window.location.href = "option.html";  // العودة إلى صفحة إدخال الزبون
+    }
+  </script>
+
+</body>
+</html>
