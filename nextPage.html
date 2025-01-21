@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>فاتورة الطلب</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap');
     body {
-      font-family: 'Amiri', serif;
-      background: linear-gradient(to bottom, #e8f5e9, #c8e6c9);
+      font-family: 'Cairo', sans-serif;
+      background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
       margin: 0;
       padding: 0;
     }
@@ -23,13 +23,13 @@
     }
 
     .header {
-      background-color: #43a047;
+      background-color: #1565c0;
       color: white;
       padding: 20px;
       text-align: center;
       font-size: 28px;
       font-weight: bold;
-      border-bottom: 5px solid #2e7d32;
+      border-bottom: 5px solid #0d47a1;
     }
 
     .invoice-details {
@@ -56,12 +56,12 @@
     }
 
     th {
-      background-color: #66bb6a;
+      background-color: #1976d2;
       color: white;
     }
 
     td {
-      background-color: #f1f8e9;
+      background-color: #e3f2fd;
     }
 
     .total {
@@ -80,7 +80,7 @@
     }
 
     button {
-      background-color: #43a047;
+      background-color: #1565c0;
       color: white;
       border: none;
       border-radius: 8px;
@@ -91,7 +91,7 @@
     }
 
     button:hover {
-      background-color: #2e7d32;
+      background-color: #0d47a1;
       transform: scale(1.05);
     }
 
@@ -100,7 +100,7 @@
       font-size: 16px;
       color: #777;
       padding: 15px;
-      background-color: #e8f5e9;
+      background-color: #e3f2fd;
     }
   </style>
 </head>
@@ -192,7 +192,7 @@
 
     function confirmInvoice() {
       alert("تم تأكيد الطلب!");
-      window.location.href = "confirmation.html"; // الانتقال للصفحة الأخيرة
+      window.location.href = "payment.html"; // الانتقال لصفحة الدفع
     }
   </script>
 </body>
