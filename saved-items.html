@@ -7,123 +7,144 @@
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background-color: #e0f7fa; /* خلفية بدرجة زرقاء هادئة */
-      color: #333;
-      text-align: center;
+      background: linear-gradient(135deg, #0d47a1, #1976d2);
+      color: #f1f1f1;
       margin: 0;
       padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
     }
 
     h1 {
-      color: #0288d1; /* لون أزرق أكثر قوة */
-      margin-top: 40px;
+      margin: 20px 0;
       font-size: 36px;
       font-weight: bold;
-    }
-
-    #itemsList {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 20px;
-      margin-bottom: 40px;
-    }
-
-    .item {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 20px;
-      border-radius: 12px;
-      background-color: #b3e5fc; /* خلفية بلون أزرق فاتح */
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-    }
-
-    .item:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    .item span {
-      font-size: 18px;
-      margin-bottom: 10px;
-      color: #0277bd; /* لون أزرق داكن */
-    }
-
-    .item input,
-    .item select {
-      font-size: 16px;
-      padding: 10px;
-      margin: 8px 0;
-      border-radius: 8px;
-      border: 1px solid #0288d1; /* حد أزرق */
-      transition: border-color 0.3s ease;
-    }
-
-    .item input:focus {
-      border-color: #0277bd; /* تحديد عند الفوكس */
-      outline: none;
-    }
-
-    .item button {
-      background-color: #ff4081; /* لون زاهي للأزرار */
-      color: white;
-      padding: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .item button:hover {
-      background-color: #f50057; /* تغيير اللون عند التمرير */
-    }
-
-    #total {
-      font-size: 20px;
-      font-weight: bold;
-      color: #0288d1;
-      margin-top: 30px;
-    }
-
-    button {
-      background-color: #0288d1; /* لون أزرق جذاب */
-      color: white;
-      border: none;
-      border-radius: 12px;
-      padding: 12px 25px;
-      margin: 20px;
-      font-size: 18px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      width: 250px;
-    }
-
-    button:hover {
-      background-color: #0277bd;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.4);
     }
 
     .container {
       width: 90%;
       max-width: 1200px;
       margin: 0 auto;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
     }
 
+    #itemsList {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .item {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: left;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    }
+
+    .item span {
+      display: block;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .item input,
+    .item select {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      color: #333;
+      font-size: 16px;
+    }
+
+    .item button {
+      background: #f44336;
+      color: #fff;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      transition: background 0.3s ease;
+    }
+
+    .item button:hover {
+      background: #c62828;
+    }
+
+    #total {
+      font-size: 22px;
+      font-weight: bold;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .actions button {
+      flex: 1;
+      max-width: 300px;
+      background: #1976d2;
+      color: #fff;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    .actions button:hover {
+      background: #0d47a1;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 768px) {
+      .actions {
+        flex-direction: column;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>📝 تعديل الملابس المختارة</h1>
+  <h1>📝 تعديل الملابس المختارة</h1>
 
+  <div class="container">
     <div id="itemsList"></div>
 
     <p id="total"></p>
 
-    <button onclick="saveChanges()">💾 حفظ التعديلات</button>
-    <button onclick="goBack()">🔙 الرجوع</button>
-    <button onclick="goToNextPage()">➡️ متابعة للصفحة التالية</button> <!-- زر للانتقال للصفحة التالية -->
+    <div class="actions">
+      <button onclick="saveChanges()">💾 حفظ التعديلات</button>
+      <button onclick="goBack()">🔙 الرجوع</button>
+      <button onclick="goToNextPage()">➡️ متابعة للصفحة التالية</button>
+    </div>
   </div>
 
   <script>
