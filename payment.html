@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>الدفع - مصبنة مشاء الله</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f0f8ff;
+      color: #333;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      color: #007bff;
+      margin-top: 20px;
+    }
+    .payment-options {
+      margin-top: 20px;
+    }
+    .payment-option {
+      background-color: #007bff;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .payment-option:hover {
+      background-color: #0056b3;
+    }
+    .total {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      margin: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    .back-button {
+      background-color: #ffc107;
+    }
+    .back-button:hover {
+      background-color: #e0a800;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>الدفع - مصبنة مشاء الله</h1>
+  
+  <div class="payment-options">
+    <div class="payment-option" onclick="selectPayment('كلي')">
+      دفع كلي
+    </div>
+    <div class="payment-option" onclick="selectPayment('جزئي')">
+      دفع جزئي
+    </div>
+  </div>
+  
+  <div class="total" id="totalAmount">
+    المجموع الكلي: 0 درهم
+  </div>
+
+  <div>
+    <button onclick="confirmPayment()">تأكيد الدفع</button>
+    <button class="back-button" onclick="goBack()">رجوع</button>
+  </div>
+
+  <script>
+    let totalAmount = 45; // هذا المبلغ سيتم حسابه استنادًا إلى الفاتورة التي تم اختياره
+    let paymentType = '';
+
+    document.getElementById('totalAmount').textContent = `المجموع الكلي: ${totalAmount} درهم`;
+
+    function selectPayment(type) {
+      paymentType = type;
+    }
+
+    function confirmPayment() {
+      if (!paymentType) {
+        alert("من فضلك اختر نوع الدفع أولًا.");
+        return;
+      }
+      if (paymentType === 'كلي') {
+        alert("تم الدفع بالكامل. سيتم الانتقال إلى صفحة التأكيد.");
+        // هنا يمكننا الانتقال إلى صفحة التأكيد بعد الدفع الكامل
+        window.location.href = "confirmation.html";
+      } else {
+        alert("تم الدفع جزئيًا. سيتم الانتقال إلى صفحة التأكيد.");
+        // هنا يمكننا الانتقال إلى صفحة التأكيد بعد الدفع الجزئي
+        window.location.href = "confirmation.html";
+      }
+    }
+
+    function goBack() {
+      window.location.href = "invoice.html"; // الرجوع إلى صفحة الفاتورة
+    }
+  </script>
+
+</body>
+</html>
