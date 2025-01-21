@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فاتورة الطلب</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f0f4fa;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    .invoice-container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .invoice-header div {
+      font-size: 16px;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th, td {
+      text-align: center;
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .total {
+      text-align: right;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-container">
+    <h1>فاتورة الطلب</h1>
+
+    <div class="invoice-header">
+      <div>الاسم: <span id="customerName">--</span></div>
+      <div>التاريخ: <span id="invoiceDate">--</span></div>
+      <div>رقم الفاتورة: <span id="invoiceNumber">--</span></div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>اللباس</th>
+          <th>الكمية</th>
+          <th>السعر (درهم)</th>
+          <th>الإجمالي (درهم)</th>
+        </tr>
+      </thead>
+      <tbody id="invoiceItems">
+        <!-- Items will be added dynamically here -->
+      </tbody>
+    </table>
+
+    <div class="total" id="totalAmount">المجموع: -- درهم</div>
+
+    <div class="buttons">
+      <button onclick="goBack()">🔙 الرجوع</button>
+      <button onclick="confirmInvoice()">✔️ تأكيد الطلب</button>
+    </div>
+  </div>
+
+  <script>
+    // بيانات افتراضية للتجربة
+    const selectedItems = JSON.parse(localStorage.getItem("selectedItems")) || [];
+    const customerName = localStorage.getItem("customerName") || "الزبون غير معروف";
+    const invoiceNumber = Math.floor(1000 + Math.random() * 9000); // رقم فاتورة عشوائي
+    const invoiceDate = new Date().toLocaleDateString();
+
+    // عرض البيانات في الصفحة
+    document.getElementById("customerName").textContent = customerName;
+    document.getElementById("invoiceDate").textContent = invoiceDate;
+    document.getElementById("invoiceNumber").textContent = invoiceNumber;
+
+    const invoiceItems = document.getElementById("invoiceItems");
+    let totalAmount = 0;
+
+    selectedItems.forEach(item => {
+      const itemTotal = item.quantity * item.price;
+      totalAmount += itemTotal;
+
+      const row = `
+        <tr>
+          <td>${item.name}</td>
+          <td>${item.quantity}</td>
+          <td>${item.price}</td>
+          <td>${itemTotal}</td>
+        </tr>
+      `;
+      invoiceItems.innerHTML += row;
+    });
+
+    document.getElementById("totalAmount").textContent = `المجموع: ${totalAmount} درهم`;
+
+    function goBack() {
+      window.location.href = "categories.html"; // الرجوع للصفحة السابقة
+    }
+
+    function confirmInvoice() {
+      alert("تم تأكيد الطلب!");
+      window.location.href = "payment.html"; // الانتقال لصفحة الدفع
+    }
+  </script>
+</body>
+</html>
