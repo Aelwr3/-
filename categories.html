@@ -3,315 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختيار الملابس</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Tajawal', sans-serif;
-            margin: 0;
-            padding: 0;
-            background: linear-gradient(to bottom right, #1e69d2, #6db3f2);
-            color: white;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            width: 90%;
-            max-width: 800px;
-            animation: zoomIn 1.5s ease;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: #f4f4f4;
-            margin-bottom: 30px;
-        }
-
-        .categories-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-        }
-
-        .category-btn {
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            color: white;
-            background-color: #1e69d2;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            width: 200px;
-            margin-bottom: 20px;
-        }
-
-        .category-btn:hover {
-            background-color: #1457a5;
-            transform: translateY(-3px);
-        }
-
-        .items-container {
-            display: none;
-            margin-top: 20px;
-            border-top: 2px solid #fff;
-            padding-top: 20px;
-        }
-
-        .item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .item button {
-            background-color: #28a745;
-            color: white;
-            padding: 5px 10px;
-            font-size: 1rem;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .item button:hover {
-            background-color: #218838;
-        }
-
-        .total-container {
-            margin-top: 20px;
-            font-size: 1.3rem;
-        }
-
-        .total-container span {
-            font-weight: bold;
-            color: #f4f4f4;
-        }
-
-        .cart-container {
-            margin-top: 20px;
-            text-align: left;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        .cart-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-        }
-
-        .cart-item span {
-            font-size: 1rem;
-        }
-
-        .cart-item button, .cart-item input {
-            padding: 5px 10px;
-            font-size: 1rem;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-        }
-
-        .cart-item button {
-            background-color: #dc3545;
-        }
-
-        .cart-item button:hover {
-            background-color: #c82333;
-        }
-
-        .cart-item input {
-            width: 50px;
-            text-align: center;
-        }
-
-        .save-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .save-btn:hover {
-            background-color: #218838;
-        }
-
-        @keyframes zoomIn {
-            from {
-                transform: scale(0);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-    </style>
+    <title>إدارة الزبون - مصبنة مشاء الله</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <div class="customer-page">
+        <h1>مصبنة مشاء الله</h1>
+        <h2>إدارة الزبون</h2>
 
-    <div class="container">
-        <h1>اختيار فئة الملابس</h1>
-        <div class="categories-container">
-            <button class="category-btn" onclick="showItems('men')">رجالية</button>
-            <button class="category-btn" onclick="showItems('women')">نسائية</button>
-            <button class="category-btn" onclick="showItems('kids')">أطفال</button>
-            <button class="category-btn" onclick="showItems('furniture')">أفرشة</button>
-            <button class="category-btn" onclick="showItems('shoes')">أحذية</button>
+        <!-- اسم الزبون -->
+        <div id="customer-info">
+            <p><strong>الزبون:</strong> <span id="customer-name"></span></p>
         </div>
 
-        <div class="items-container" id="itemsContainer"></div>
-
-        <div class="total-container" id="totalContainer">
-            <span>المجموع: </span><span id="totalPrice">0</span> درهم
+        <!-- الخيارات المتاحة -->
+        <div class="options">
+            <button onclick="goToCategories()">اختيار الملابس</button>
+            <button onclick="editCustomerName()">تعديل اسم الزبون</button>
+            <button onclick="deleteCustomer()">حذف الزبون</button>
+            <button onclick="goBack()">الرجوع</button>
         </div>
-
-        <div class="cart-container" id="cartContainer">
-            <h3>الملابس المختارة:</h3>
-            <div id="cartItems"></div>
-        </div>
-
-        <button class="save-btn" onclick="saveAndProceed()">حفظ والانتقال للخطوة التالية</button>
     </div>
 
+    <!-- سكريبت إدارة الزبون -->
     <script>
-        const itemsData = {
-            men: [
-                { name: 'قميص رجالي', price: 100 },
-                { name: 'بنطال رجالي', price: 150 },
-                { name: 'جاكيت رجالي', price: 200 },
-                { name: 'تيشرت رجالي', price: 80 },
-                { name: 'سروال قصير', price: 60 },
-                { name: 'بلايز رجالية', price: 120 },
-                { name: 'سويتر رجالي', price: 180 },
-                { name: 'حذاء رياضي رجالي', price: 300 },
-                { name: 'حذاء كلاسيكي رجالي', price: 250 },
-                { name: 'قميص بولو', price: 130 },
-                { name: 'سروال جينز رجالي', price: 200 },
-                { name: 'جاكيت شتوي رجالي', price: 250 }
-            ],
-            women: [
-                { name: 'فستان نسائي', price: 120 },
-                { name: 'توب نسائي', price: 80 },
-                { name: 'بنطال نسائي', price: 150 },
-                { name: 'جاكيت نسائي', price: 200 },
-                { name: 'تنورة نسائية', price: 100 },
-                { name: 'بلوزة نسائية', price: 90 },
-                { name: 'حذاء نسائي', price: 250 },
-                { name: 'حقيبة نسائية', price: 300 },
-                { name: 'ملابس سباحة نسائية', price: 150 },
-                { name: 'سويت شيرت نسائي', price: 180 },
-                { name: 'جاكيت شتوي نسائي', price: 220 },
-                { name: 'حذاء رياضي نسائي', price: 270 }
-            ],
-            kids: [
-                { name: 'قميص أطفال', price: 50 },
-                { name: 'بنطال أطفال', price: 70 },
-                { name: 'تيشرت أطفال', price: 40 },
-                { name: 'جاكيت أطفال', price: 90 },
-                { name: 'حذاء أطفال', price: 100 },
-                { name: 'سروال قصير أطفال', price: 30 },
-                { name: 'سويت شيرت أطفال', price: 60 },
-                { name: 'بيجامة أطفال', price: 45 },
-                { name: 'قبعة أطفال', price: 25 },
-                { name: 'جوارب أطفال', price: 10 },
-                { name: 'معطف أطفال', price: 150 },
-                { name: 'سروال جينز أطفال', price: 80 }
-            ],
-            furniture: [
-                { name: 'غطاء سرير', price: 150 },
-                { name: 'لحاف', price: 200 },
-                { name: 'وسادة', price: 40 },
-                { name: 'مفرش', price: 100 },
-                { name: 'ستارة', price: 60 },
-                { name: 'سجادة', price: 300 },
-                { name: 'شراشف سرير', price: 120 },
-                { name: 'مخدة', price: 50 },
-                { name: 'مفرش طاولة', price: 25 },
-                { name: 'بطانية', price: 180 },
-                { name: 'فوط حمام', price: 20 },
-                { name: 'شال', price: 70 }
-            ],
-            shoes: [
-                { name: 'حذاء رياضي', price: 250 },
-                { name: 'حذاء كلاسيكي', price: 300 },
-                { name: 'صندل رجالي', price: 120 },
-                { name: 'صندل نسائي', price: 150 },
-                { name: 'حذاء رياضي نسائي', price: 200 },
-                { name: 'حذاء أطفال', price: 100 },
-                { name: 'جزمة شتوي', price: 350 },
-                { name: 'صندل أطفال', price: 80 }
-            ]
-        };
+        // جلب اسم الزبون من localStorage
+        let customerName = localStorage.getItem("selectedCustomer");
+        const customerNameElement = document.getElementById("customer-name");
 
-        let selectedItems = [];
-        let totalPrice = 0;
-
-        function showItems(category) {
-            const itemsContainer = document.getElementById('itemsContainer');
-            itemsContainer.innerHTML = ''; // Clear previous items
-            const items = itemsData[category];
-
-            items.forEach(item => {
-                const itemElement = document.createElement('div');
-                itemElement.classList.add('item');
-                itemElement.innerHTML = `
-                    <span>${item.name}</span>
-                    <span>${item.price} درهم</span>
-                    <button onclick="addItem('${item.name}', ${item.price})">أضف</button>
-                `;
-                itemsContainer.appendChild(itemElement);
-            });
-
-            itemsContainer.style.display = 'block';
+        if (customerName) {
+            customerNameElement.textContent = customerName;
+        } else {
+            alert("لا يوجد زبون محدد! سيتم الرجوع إلى الصفحة السابقة.");
+            window.location.href = "customer-selection.html";
         }
 
-        function addItem(name, price) {
-            selectedItems.push({ name, price, quantity: 1 });
-            updateCart();
+        // الانتقال إلى صفحة الفئات
+        function goToCategories() {
+            window.location.href = "categories.html";
         }
 
-        function updateCart() {
-            const cartContainer = document.getElementById('cartItems');
-            cartContainer.innerHTML = '';
-            totalPrice = 0;
-
-            selectedItems.forEach((item, index) => {
-                const cartItem = document.createElement('div');
-                cartItem.classList.add('cart-item');
-                cartItem.innerHTML = `
-                    <span>${item.name} x${item.quantity}</span>
-                    <span>${item.price * item.quantity} درهم</span>
-                    <input type="number" value="${item.quantity}" onchange="updateQuantity(${index}, this.value)">
-                    <button onclick="removeItem(${index})">حذف</button>
-                `;
-                cartContainer.appendChild(cartItem);
-                totalPrice += item.price * item.quantity;
-            });
-
-            document.getElementById('totalPrice').innerText = totalPrice;
+        // تعديل اسم الزبون
+        function editCustomerName() {
+            let newName = prompt("أدخل الاسم الجديد للزبون:", customerName);
+            if (newName) {
+                customerName = newName;
+                localStorage.setItem("selectedCustomer", customerName);
+                customerNameElement.textContent = customerName;
+                alert("تم تعديل اسم الزبون بنجاح!");
+            }
         }
 
-        function update
+        // حذف الزبون
+        function deleteCustomer() {
+            if (confirm("هل أنت متأكد أنك تريد حذف هذا الزبون؟")) {
+                let customers = JSON.parse(localStorage.getItem("customers")) || [];
+                customers = customers.filter(c => c !== customerName);
+                localStorage.setItem("customers", JSON.stringify(customers));
+                localStorage.removeItem("selectedCustomer");
+                alert("تم حذف الزبون بنجاح!");
+                window.location.href = "customer-selection.html";
+            }
+        }
+
+        // الرجوع إلى صفحة اختيار الزبون
+        function goBack() {
+            window.location.href = "customer-selection.html";
+        }
+    </script>
+</body>
+</html>
