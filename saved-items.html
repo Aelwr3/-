@@ -157,23 +157,23 @@
       selectedItems.forEach((item, index) => {
         itemsList.innerHTML += `
           <div class="item">
-            <span>${item}</span>
-            <input type="number" id="quantity${index}" value="1" min="1" placeholder="الكمية" />
-            <input type="number" id="price${index}" value="10" min="0" placeholder="السعر" />
-            <input type="text" id="name${index}" value="${item}" placeholder="اسم العنصر" />
+            <span>${item.name}</span>
+            <input type="number" id="quantity${index}" value="${item.quantity}" min="1" placeholder="الكمية" onchange="calculateTotal()" />
+            <input type="number" id="price${index}" value="${item.price}" min="0" placeholder="السعر" onchange="calculateTotal()" />
+            <input type="text" id="name${index}" value="${item.name}" placeholder="اسم العنصر" />
             <button onclick="removeItem(${index})">❌ حذف</button>
           </div>
         `;
       });
 
-      calculateTotal();
+      calculateTotal(); // حساب المجموع بعد عرض العناصر
     }
 
     function calculateTotal() {
       let total = 0;
       selectedItems.forEach((item, index) => {
-        const quantity = document.getElementById(`quantity${index}`).value;
-        const price = document.getElementById(`price${index}`).value;
+        const quantity = parseInt(document.getElementById(`quantity${index}`).value) || 0;
+        const price = parseFloat(document.getElementById(`price${index}`).value) || 0;
         total += quantity * price;
       });
       document.getElementById("total").textContent = `المجموع: ${total} درهم`;
