@@ -83,7 +83,6 @@
   <button onclick="goBack()">🔙 الرجوع</button>
 
   <script>
-    // البيانات
     const categories = {
       "رجالية": ["👔 قميص", "👖 بنطال", "🧥 جاكيت", "🎩 قبعة", "👕 تيشرت", "🩳 شورت", "🧦 جوارب", "👞 حذاء", "👙 ملابس داخلية", "🧣 وشاح"],
       "نسائية": ["👗 فستان", "👜 حقيبة", "👡 صندل", "👒 قبعة", "🩴 شبشب", "👕 تيشرت", "👚 بلوزة", "👖 بنطال", "🧥 معطف", "🧤 قفازات"],
@@ -94,16 +93,6 @@
 
     let selectedItems = [];
 
-    // استرجاع العناصر من localStorage إذا كانت موجودة
-    window.onload = function() {
-      const storedItems = localStorage.getItem("selectedItems");
-      if (storedItems) {
-        selectedItems = JSON.parse(storedItems);
-        updateSelectedItems();
-      }
-    };
-
-    // عرض العناصر عند اختيار الفئة
     function showItems(category, emoji) {
       const itemsList = document.getElementById("itemsList");
       itemsList.innerHTML = `<h2>${emoji} ${category}</h2>`;
@@ -117,13 +106,11 @@
       });
     }
 
-    // إضافة عنصر مختار
     function addItem(item) {
       selectedItems.push(item);
       updateSelectedItems();
     }
 
-    // تحديث عرض العناصر المختارة
     function updateSelectedItems() {
       const selectedItemsDiv = document.getElementById("selectedItems");
       selectedItemsDiv.innerHTML = "";
@@ -139,26 +126,22 @@
       calculateTotal();
     }
 
-    // حذف عنصر
     function removeItem(index) {
       selectedItems.splice(index, 1);
       updateSelectedItems();
     }
 
-    // حساب المجموع
     function calculateTotal() {
       const total = selectedItems.length * 10; // 10 دراهم لكل قطعة كمثال
       document.getElementById("total").textContent = `المجموع: ${total} درهم`;
     }
 
-    // حفظ العناصر في localStorage
     function saveAndProceed() {
       localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
       alert("تم حفظ الملابس!");
-      // الانتقال إلى الصفحة التالية
+      window.location.href = "saved-items.html"; // الانتقال إلى صفحة التفاصيل
     }
 
-    // العودة إلى الصفحة السابقة
     function goBack() {
       window.location.href = "option.html";
     }
