@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background-color: #f9f9f9;
+      background-color: #e0f7fa; /* خلفية بدرجة زرقاء هادئة */
       color: #333;
       text-align: center;
       margin: 0;
@@ -15,8 +15,8 @@
     }
 
     h1 {
-      color: #007bff;
-      margin-top: 30px;
+      color: #0288d1; /* لون أزرق أكثر قوة */
+      margin-top: 40px;
       font-size: 36px;
       font-weight: bold;
     }
@@ -26,6 +26,7 @@
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
       padding: 20px;
+      margin-bottom: 40px;
     }
 
     .item {
@@ -34,8 +35,8 @@
       justify-content: space-between;
       padding: 20px;
       border-radius: 12px;
-      background-color: #fff;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: #b3e5fc; /* خلفية بلون أزرق فاتح */
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       transition: all 0.3s ease;
     }
 
@@ -47,26 +48,26 @@
     .item span {
       font-size: 18px;
       margin-bottom: 10px;
-      color: #333;
+      color: #0277bd; /* لون أزرق داكن */
     }
 
     .item input,
     .item select {
       font-size: 16px;
-      padding: 8px;
+      padding: 10px;
       margin: 8px 0;
       border-radius: 8px;
-      border: 1px solid #ddd;
+      border: 1px solid #0288d1; /* حد أزرق */
       transition: border-color 0.3s ease;
     }
 
     .item input:focus {
-      border-color: #007bff;
+      border-color: #0277bd; /* تحديد عند الفوكس */
       outline: none;
     }
 
     .item button {
-      background-color: #ff4d4d;
+      background-color: #ff4081; /* لون زاهي للأزرار */
       color: white;
       padding: 10px;
       font-size: 16px;
@@ -77,18 +78,18 @@
     }
 
     .item button:hover {
-      background-color: #e60000;
+      background-color: #f50057; /* تغيير اللون عند التمرير */
     }
 
     #total {
       font-size: 20px;
       font-weight: bold;
-      color: #007bff;
+      color: #0288d1;
       margin-top: 30px;
     }
 
     button {
-      background-color: #007bff;
+      background-color: #0288d1; /* لون أزرق جذاب */
       color: white;
       border: none;
       border-radius: 12px;
@@ -97,11 +98,11 @@
       font-size: 18px;
       cursor: pointer;
       transition: background-color 0.3s ease;
-      width: 200px;
+      width: 250px;
     }
 
     button:hover {
-      background-color: #0056b3;
+      background-color: #0277bd;
     }
 
     .container {
@@ -122,6 +123,7 @@
 
     <button onclick="saveChanges()">💾 حفظ التعديلات</button>
     <button onclick="goBack()">🔙 الرجوع</button>
+    <button onclick="goToNextPage()">➡️ متابعة للصفحة التالية</button> <!-- زر للانتقال للصفحة التالية -->
   </div>
 
   <script>
@@ -175,6 +177,10 @@
 
     function goBack() {
       window.location.href = "categories.html";
+    }
+
+    function goToNextPage() {
+      window.location.href = "nextPage.html";  // رابط الصفحة التالية
     }
 
     displayItems();
