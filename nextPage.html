@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>فاتورة الطلب</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap');
     body {
-      font-family: 'Cairo', sans-serif;
-      background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+      font-family: 'Amiri', serif;
+      background: linear-gradient(to bottom, #e8f5e9, #c8e6c9);
       margin: 0;
       padding: 0;
     }
@@ -19,25 +20,16 @@
       border-radius: 12px;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
       overflow: hidden;
-      animation: oscillate 2s ease-in-out infinite;
-    }
-
-    @keyframes oscillate {
-      0%, 100% {
-        transform: translateX(0);
-      }
-      50% {
-        transform: translateX(5px);
-      }
     }
 
     .header {
-      background-color: #007bff;
+      background-color: #43a047;
       color: white;
       padding: 20px;
       text-align: center;
-      font-size: 24px;
+      font-size: 28px;
       font-weight: bold;
+      border-bottom: 5px solid #2e7d32;
     }
 
     .invoice-details {
@@ -46,10 +38,7 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 2px solid #ddd;
-    }
-
-    .invoice-details div {
-      font-size: 16px;
+      font-size: 18px;
       color: #555;
     }
 
@@ -61,23 +50,22 @@
 
     th, td {
       text-align: center;
-      padding: 12px;
-      font-size: 16px;
+      padding: 15px;
+      font-size: 18px;
+      border: 1px solid #ddd;
     }
 
     th {
-      background-color: #007bff;
+      background-color: #66bb6a;
       color: white;
-      border-bottom: 3px solid #ddd;
     }
 
     td {
-      background-color: #f9f9f9;
-      border-bottom: 1px solid #ddd;
+      background-color: #f1f8e9;
     }
 
     .total {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: bold;
       text-align: right;
       padding: 20px;
@@ -92,27 +80,27 @@
     }
 
     button {
-      background-color: #007bff;
+      background-color: #43a047;
       color: white;
       border: none;
       border-radius: 8px;
       padding: 12px 20px;
-      font-size: 16px;
+      font-size: 18px;
       cursor: pointer;
       transition: all 0.3s ease;
     }
 
     button:hover {
-      background-color: #0056b3;
+      background-color: #2e7d32;
       transform: scale(1.05);
     }
 
     .footer {
       text-align: center;
-      font-size: 14px;
+      font-size: 16px;
       color: #777;
-      padding: 10px;
-      background-color: #e3f2fd;
+      padding: 15px;
+      background-color: #e8f5e9;
     }
   </style>
 </head>
@@ -152,17 +140,20 @@
   </div>
 
   <script>
-    // الاحتفاظ بالرقم التسلسلي دائمًا
-    if (!localStorage.getItem("invoiceNumber")) {
-      const generatedNumber = Math.floor(1000 + Math.random() * 9000); // رقم عشوائي
-      localStorage.setItem("invoiceNumber", generatedNumber);
+    // إعداد الرقم التسلسلي
+    if (!localStorage.getItem("invoiceCounter")) {
+      localStorage.setItem("invoiceCounter", 1000); // البداية من 1000
     }
 
     const selectedItems = JSON.parse(localStorage.getItem("selectedItems")) || [];
-    const invoiceNumber = localStorage.getItem("invoiceNumber");
+    const invoiceCounter = parseInt(localStorage.getItem("invoiceCounter"));
+    const invoiceNumber = `INV-${invoiceCounter}`;
     const invoiceDate = new Date().toLocaleDateString();
 
-    // عرض البيانات في الصفحة
+    // حفظ الرقم الجديد
+    localStorage.setItem("invoiceCounter", invoiceCounter + 1);
+
+    // عرض البيانات
     document.getElementById("invoiceDate").textContent = invoiceDate;
     document.getElementById("invoiceNumber").textContent = invoiceNumber;
 
@@ -184,10 +175,16 @@
       invoiceItems.innerHTML += row;
     });
 
-    // حفظ المجموع الكلي في localStorage
-    localStorage.setItem("totalAmount", totalAmount);
-
     document.getElementById("totalAmount").textContent = `المجموع: ${totalAmount} درهم`;
+
+    // حفظ الفاتورة
+    const invoiceData = {
+      number: invoiceNumber,
+      date: invoiceDate,
+      items: selectedItems,
+      total: totalAmount,
+    };
+    localStorage.setItem("currentInvoice", JSON.stringify(invoiceData));
 
     function goBack() {
       window.location.href = "categories.html"; // الرجوع للصفحة السابقة
@@ -195,7 +192,7 @@
 
     function confirmInvoice() {
       alert("تم تأكيد الطلب!");
-      window.location.href = "payment.html"; // الانتقال لصفحة الدفع
+      window.location.href = "confirmation.html"; // الانتقال للصفحة الأخيرة
     }
   </script>
 </body>
