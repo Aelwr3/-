@@ -110,7 +110,8 @@
   </div>
 
   <script>
-    let totalAmount = 100; // هذا المبلغ سيتم حسابه استنادًا إلى الفاتورة التي تم اختياره
+    // استرجاع المجموع الكلي من localStorage
+    let totalAmount = parseFloat(localStorage.getItem('totalAmount')) || 0;
     let paymentType = '';
     let paidAmount = 0;  // المتبقي من المبلغ
     let partialAmount = 0;
