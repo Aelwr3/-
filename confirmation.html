@@ -1,0 +1,15 @@
+function confirmPayment() {
+  if (!paymentType) {
+    alert("من فضلك اختر نوع الدفع أولًا.");
+    return;
+  }
+  if (paymentType === 'كلي') {
+    alert("تم الدفع بالكامل. سيتم الانتقال إلى صفحة التأكيد.");
+    window.location.href = "confirmation.html"; // الانتقال إلى صفحة التأكيد بعد الدفع الكامل
+  } else if (paymentType === 'جزئي' && partialAmount > 0) {
+    alert("تم الدفع جزئيًا. سيتم الانتقال إلى صفحة التأكيد.");
+    window.location.href = "confirmation.html"; // الانتقال إلى صفحة التأكيد بعد الدفع الجزئي
+  } else {
+    alert("من فضلك أدخل المبلغ المدفوع مسبقًا.");
+  }
+}
