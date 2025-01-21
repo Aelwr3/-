@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>شكراً على اختيارنا</title>
+  <title>التأكيد النهائي للطلب</title>
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background: linear-gradient(to bottom, #bbdefb, #e3f2fd);
+      background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
       margin: 0;
       padding: 0;
       display: flex;
@@ -43,6 +43,7 @@
       color: #007bff;
       margin-bottom: 20px;
       font-size: 24px;
+      font-weight: bold;
     }
 
     p {
@@ -126,12 +127,41 @@
     .search-button:hover {
       background-color: #0056b3;
     }
+
+    .error-message {
+      color: red;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+      border-radius: 10px;
+      z-index: 10;
+      display: none;
+      animation: slideIn 0.5s ease-in-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translate(-50%, -50%) translateY(100px);
+      }
+      to {
+        transform: translate(-50%, -50%) translateY(0);
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>شكراً على اختيار مصبنة مشاء الله</h1>
-    <p>فاتورتك جاهزة، وشكرًا على ثقتك بنا.</p>
+    <p>تمت معالجة طلبك بنجاح!</p>
 
     <div class="search-container">
       <input type="text" id="searchInvoiceNumber" placeholder="أدخل رقم الفاتورة للبحث">
@@ -160,13 +190,30 @@
     <button onclick="exitPage()">خروج</button>
   </div>
 
+  <div class="popup" id="popup">
+    <h2>تفاصيل الفاتورة</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>الملابس</th>
+          <th>الكمية</th>
+          <th>السعر</th>
+          <th>الإجمالي</th>
+        </tr>
+      </thead>
+      <tbody id="popupDetails"></tbody>
+    </table>
+    <button onclick="closePopup()">إغلاق</button>
+    <button onclick="viewFullInvoice()">عرض الفاتورة بالكامل</button>
+  </div>
+
   <script>
-    // استرجاع معلومات الفاتورة
+    // بيانات الفاتورة من localStorage
     const invoiceNumber = localStorage.getItem("invoiceNumber");
     const invoiceDate = localStorage.getItem("invoiceDate");
     const paymentStatus = localStorage.getItem("paymentStatus");
+    const items = JSON.parse(localStorage.getItem("selectedItems")) || [];
 
-    // تحديث الصفحة بالبيانات
     document.getElementById("invoiceNumber").textContent = invoiceNumber || "--";
     document.getElementById("invoiceDate").textContent = invoiceDate || "--";
 
@@ -181,33 +228,48 @@
       statusCell.textContent = "--";
     }
 
-    // وظيفة البحث عن الفاتورة
+    // البحث عن الفاتورة
     function searchInvoice() {
       const searchNumber = document.getElementById("searchInvoiceNumber").value;
-      const storedInvoiceNumber = localStorage.getItem("invoiceNumber");
-
-      if (searchNumber === storedInvoiceNumber) {
-        // إذا تم العثور على الفاتورة
-        alert("تم العثور على الفاتورة!");
-        document.getElementById("invoiceNumber").textContent = storedInvoiceNumber;
-        document.getElementById("invoiceDate").textContent = invoiceDate;
-        const statusCell = document.getElementById("paymentStatus");
-        if (paymentStatus === "مدفوع بالكامل") {
-          statusCell.textContent = paymentStatus;
-          statusCell.classList.add("paid");
-        } else if (paymentStatus === "جزئي") {
-          statusCell.textContent = `المتبقي: ${localStorage.getItem("remainingAmount")} درهم`;
-          statusCell.classList.add("due");
-        }
+      if (searchNumber === invoiceNumber) {
+        displayPopup();
       } else {
-        // إذا لم يتم العثور على الفاتورة
-        alert("الفاتورة غير موجودة!");
+        alert("الفاتورة غير موجودة");
       }
     }
 
-    // وظيفة زر الخروج
+    // عرض الفاتورة في النافذة المنبثقة
+    function displayPopup() {
+      const popup = document.getElementById("popup");
+      const popupDetails = document.getElementById("popupDetails");
+
+      popup.style.display = "block";
+
+      items.forEach(item => {
+        const row = `
+          <tr>
+            <td>${item.name}</td>
+            <td>${item.quantity}</td>
+            <td>${item.price}</td>
+            <td>${item.quantity * item.price}</td>
+          </tr>
+        `;
+        popupDetails.innerHTML += row;
+      });
+    }
+
+    // إغلاق النافذة المنبثقة
+    function closePopup() {
+      document.getElementById("popup").style.display = "none";
+    }
+
+    // عرض الفاتورة بالكامل
+    function viewFullInvoice() {
+      window.location.href = "nextPage.html";
+    }
+
+    // الخروج والرجوع للصفحة الرئيسية
     function exitPage() {
-      // العودة إلى صفحة إدخال الزبون
       window.location.href = "option.html";
     }
   </script>
