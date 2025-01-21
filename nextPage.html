@@ -7,33 +7,38 @@
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background-color: #f0f4fa;
-      color: #333;
+      background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
       margin: 0;
       padding: 0;
     }
 
     .invoice-container {
-      max-width: 600px;
+      max-width: 800px;
       margin: 40px auto;
       background-color: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .header {
+      background-color: #007bff;
+      color: white;
       padding: 20px;
-    }
-
-    h1, h2 {
       text-align: center;
-      color: #007bff;
+      font-size: 24px;
+      font-weight: bold;
     }
 
-    .invoice-header {
+    .invoice-details {
+      padding: 20px;
       display: flex;
       justify-content: space-between;
-      margin-bottom: 20px;
+      align-items: center;
+      border-bottom: 2px solid #ddd;
     }
 
-    .invoice-header div {
+    .invoice-details div {
       font-size: 16px;
       color: #555;
     }
@@ -41,31 +46,39 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin: 20px 0;
     }
 
     th, td {
       text-align: center;
-      border: 1px solid #ddd;
-      padding: 8px;
+      padding: 12px;
+      font-size: 16px;
     }
 
     th {
       background-color: #007bff;
       color: white;
+      border-bottom: 3px solid #ddd;
+    }
+
+    td {
+      background-color: #f9f9f9;
+      border-bottom: 1px solid #ddd;
     }
 
     .total {
-      text-align: right;
       font-size: 18px;
       font-weight: bold;
-      margin-top: 20px;
+      text-align: right;
+      padding: 20px;
+      border-top: 2px solid #ddd;
     }
 
     .buttons {
       display: flex;
       justify-content: space-between;
-      margin-top: 30px;
+      padding: 20px;
+      background-color: #f1f1f1;
     }
 
     button {
@@ -73,23 +86,32 @@
       color: white;
       border: none;
       border-radius: 8px;
-      padding: 10px 20px;
+      padding: 12px 20px;
       font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: all 0.3s ease;
     }
 
     button:hover {
       background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      padding: 10px;
+      background-color: #e3f2fd;
     }
   </style>
 </head>
 <body>
   <div class="invoice-container">
-    <h1>فاتورة الطلب</h1>
+    <div class="header">فاتورة الطلب</div>
 
-    <div class="invoice-header">
-      <div>الاسم: <span id="customerName">--</span></div>
+    <div class="invoice-details">
+      <div>اسم الزبون: <span id="customerName">--</span></div>
       <div>التاريخ: <span id="invoiceDate">--</span></div>
       <div>رقم الفاتورة: <span id="invoiceNumber">--</span></div>
     </div>
@@ -114,6 +136,10 @@
       <button onclick="goBack()">🔙 الرجوع</button>
       <button onclick="confirmInvoice()">✔️ تأكيد الطلب</button>
     </div>
+  </div>
+
+  <div class="footer">
+    © 2025 مصبنة مشاء الله - جميع الحقوق محفوظة
   </div>
 
   <script>
@@ -158,4 +184,4 @@
     }
   </script>
 </body>
-</html>
+  </html>
