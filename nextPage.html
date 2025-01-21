@@ -140,34 +140,26 @@
   </div>
 
   <script>
-    // التحقق من وجود رقم تسلسلي محفوظ
-    let currentInvoice = JSON.parse(localStorage.getItem("currentInvoice"));
-    if (!currentInvoice) {
-      // إذا لم يكن هناك فاتورة حالية، قم بإنشاء واحدة جديدة
+    // إعداد الرقم التسلسلي للفاتورة
+    let invoiceNumber = localStorage.getItem("currentInvoiceNumber");
+    if (!invoiceNumber) {
       const invoiceCounter = parseInt(localStorage.getItem("invoiceCounter")) || 1000;
-      const invoiceNumber = `INV-${invoiceCounter}`;
-      const invoiceDate = new Date().toLocaleDateString();
-
-      currentInvoice = {
-        number: invoiceNumber,
-        date: invoiceDate,
-        items: JSON.parse(localStorage.getItem("selectedItems")) || [],
-        total: 0,
-      };
-
-      // تحديث الرقم التسلسلي للفواتير المستقبلية
+      invoiceNumber = `INV-${invoiceCounter}`;
+      localStorage.setItem("currentInvoiceNumber", invoiceNumber);
       localStorage.setItem("invoiceCounter", invoiceCounter + 1);
-      localStorage.setItem("currentInvoice", JSON.stringify(currentInvoice));
     }
 
-    // عرض البيانات في الصفحة
-    document.getElementById("invoiceDate").textContent = currentInvoice.date;
-    document.getElementById("invoiceNumber").textContent = currentInvoice.number;
+    // إعداد التاريخ
+    const invoiceDate = new Date().toLocaleDateString();
+    document.getElementById("invoiceDate").textContent = invoiceDate;
+    document.getElementById("invoiceNumber").textContent = invoiceNumber;
 
+    // إعداد العناصر
+    const selectedItems = JSON.parse(localStorage.getItem("selectedItems")) || [];
     const invoiceItems = document.getElementById("invoiceItems");
     let totalAmount = 0;
 
-    currentInvoice.items.forEach(item => {
+    selectedItems.forEach(item => {
       const itemTotal = item.quantity * item.price;
       totalAmount += itemTotal;
 
@@ -182,11 +174,9 @@
       invoiceItems.innerHTML += row;
     });
 
-    currentInvoice.total = totalAmount;
+    // حفظ الإجمالي وعرضه
     document.getElementById("totalAmount").textContent = `المجموع: ${totalAmount} درهم`;
-
-    // تحديث بيانات الفاتورة الحالية
-    localStorage.setItem("currentInvoice", JSON.stringify(currentInvoice));
+    localStorage.setItem("totalAmount", totalAmount);
 
     function goBack() {
       window.location.href = "categories.html"; // الرجوع للصفحة السابقة
