@@ -77,6 +77,32 @@
             background-color: #218838;
         }
 
+        /* الحاوية لعرض الزبائن مع أزرار الحذف */
+        .customer-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            align-items: center;
+        }
+
+        .customer-item button {
+            background-color: #dc3545;
+            padding: 5px 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .customer-item button:hover {
+            background-color: #c82333;
+        }
+
         @keyframes zoomIn {
             from {
                 transform: scale(0);
@@ -96,9 +122,7 @@
         <button onclick="showAddCustomer()">إضافة زبون جديد</button>
         <div class="list-container">
             <h2>أو اختر زبون من القائمة</h2>
-            <select id="customerList">
-                <option value="" disabled selected>اختر زبونًا</option>
-            </select>
+            <div id="customerListContainer"></div>
             <button class="add-button" onclick="selectCustomer()">اختيار الزبون</button>
         </div>
     </div>
@@ -126,27 +150,38 @@
 
         // دالة لتحديث قائمة الزبائن
         function updateCustomerList() {
-            const customerList = document.getElementById('customerList');
-            customerList.innerHTML = '<option value="" disabled selected>اختر زبونًا</option>';
+            const customerListContainer = document.getElementById('customerListContainer');
+            customerListContainer.innerHTML = ''; // تنظيف القائمة السابقة
             customers.forEach((customer, index) => {
-                const option = document.createElement('option');
-                option.value = index;
-                option.textContent = `${customer.name} - ${customer.phone}`;
-                customerList.appendChild(option);
+                const customerItem = document.createElement('div');
+                customerItem.classList.add('customer-item');
+                customerItem.innerHTML = `
+                    <span>${customer.name} - ${customer.phone}</span>
+                    <button onclick="deleteCustomer(${index})">حذف</button>
+                `;
+                customerListContainer.appendChild(customerItem);
             });
+        }
+
+        // دالة لحذف الزبون
+        function deleteCustomer(index) {
+            if (confirm('هل أنت متأكد أنك تريد حذف هذا الزبون؟')) {
+                customers.splice(index, 1);
+                localStorage.setItem('customers', JSON.stringify(customers));
+                updateCustomerList();
+            }
         }
 
         // دالة لاختيار الزبون
         function selectCustomer() {
-            const selectedIndex = document.getElementById('customerList').value;
-            if (selectedIndex !== "") {
-                const selectedCustomer = customers[selectedIndex];
+            const selectedCustomer = customers.length > 0 ? customers[0] : null;
+            if (selectedCustomer) {
                 alert(`تم اختيار الزبون: ${selectedCustomer.name}`);
                 // الانتقال إلى صفحة الفئات مع إرسال بيانات الزبون
                 localStorage.setItem('selectedCustomer', JSON.stringify(selectedCustomer));
                 window.location.href = "categories.html"; // الانتقال إلى صفحة الفئات
             } else {
-                alert('الرجاء اختيار زبون');
+                alert('الرجاء إضافة زبون أولاً');
             }
         }
 
@@ -155,4 +190,4 @@
     </script>
 
 </body>
-                                                                                 </html>
+</html>
