@@ -44,6 +44,18 @@
       font-size: 18px;
       color: #333;
     }
+    .payment-input {
+      margin-top: 20px;
+      display: none;
+    }
+    input[type="number"] {
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      width: 50%;
+      margin-top: 10px;
+    }
     button {
       background-color: #28a745;
       color: white;
@@ -83,8 +95,13 @@
     المجموع الكلي: 0 درهم
   </div>
 
+  <div class="payment-input" id="partialPaymentInput">
+    <label for="partialAmount">المبلغ المدفوع مسبقًا:</label>
+    <input type="number" id="partialAmount" placeholder="أدخل المبلغ المدفوع" oninput="updateRemaining()">
+  </div>
+
   <div class="info-text">
-    <p>يرجى اختيار طريقة الدفع التي تفضلها. إذا اخترت الدفع الجزئي، سيتم حساب المبلغ المتبقي.</p>
+    <p>يرجى اختيار طريقة الدفع التي تفضلها. إذا اخترت الدفع الجزئي، يرجى إدخال المبلغ المدفوع مسبقًا.</p>
   </div>
 
   <div>
@@ -93,9 +110,10 @@
   </div>
 
   <script>
-    let totalAmount = 45; // هذا المبلغ سيتم حسابه استنادًا إلى الفاتورة التي تم اختياره
+    let totalAmount = 100; // هذا المبلغ سيتم حسابه استنادًا إلى الفاتورة التي تم اختياره
     let paymentType = '';
     let paidAmount = 0;  // المتبقي من المبلغ
+    let partialAmount = 0;
 
     // عرض المجموع الكلي
     document.getElementById('totalAmount').textContent = `المجموع الكلي: ${totalAmount} درهم`;
@@ -105,9 +123,19 @@
       if (paymentType === 'كلي') {
         paidAmount = totalAmount;
         document.getElementById('totalAmount').textContent = `المجموع الكلي: ${totalAmount} درهم (تم دفع كامل المبلغ)`;
+        document.getElementById('partialPaymentInput').style.display = 'none';
       } else {
-        paidAmount = totalAmount / 2; // مثلا دفع جزئي بنصف المبلغ
-        document.getElementById('totalAmount').textContent = `المجموع الكلي: ${totalAmount} درهم (تم دفع جزئي)`;
+        document.getElementById('partialPaymentInput').style.display = 'block';
+      }
+    }
+
+    function updateRemaining() {
+      partialAmount = document.getElementById('partialAmount').value;
+      let remainingAmount = totalAmount - partialAmount;
+      if (remainingAmount > 0) {
+        document.getElementById('totalAmount').textContent = `المجموع الكلي: ${remainingAmount} درهم (تم دفع جزئي)`;
+      } else {
+        document.getElementById('totalAmount').textContent = `المجموع الكلي: 0 درهم (تم الدفع بالكامل)`;
       }
     }
 
@@ -119,14 +147,16 @@
       if (paymentType === 'كلي') {
         alert("تم الدفع بالكامل. سيتم الانتقال إلى صفحة التأكيد.");
         window.location.href = "confirmation.html"; // الانتقال إلى صفحة التأكيد بعد الدفع الكامل
-      } else {
+      } else if (paymentType === 'جزئي' && partialAmount > 0) {
         alert("تم الدفع جزئيًا. سيتم الانتقال إلى صفحة التأكيد.");
         window.location.href = "confirmation.html"; // الانتقال إلى صفحة التأكيد بعد الدفع الجزئي
+      } else {
+        alert("من فضلك أدخل المبلغ المدفوع مسبقًا.");
       }
     }
 
     function goBack() {
-      window.location.href = "invoice.html"; // الرجوع إلى صفحة الفاتورة
+      window.location.href = "nextPage.html"; // الرجوع إلى الصفحة التالية
     }
   </script>
 
