@@ -3,159 +3,181 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تفاصيل الملابس المختارة</title>
+  <title>مصبنة مشاء الله - تعديل الملابس المختارة</title>
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background-color: #f4f7fa;
+      background-color: #f9f9f9;
       color: #333;
       text-align: center;
       margin: 0;
       padding: 0;
     }
+
     h1 {
       color: #007bff;
-      margin-top: 20px;
+      margin-top: 30px;
+      font-size: 36px;
+      font-weight: bold;
     }
-    .container {
-      background-color: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      padding: 30px;
-      margin-top: 20px;
-      width: 80%;
-      margin: auto;
-      text-align: left;
+
+    #itemsList {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
     }
+
     .item {
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid #ddd;
-      padding: 15px 0;
-      font-size: 18px;
+      padding: 20px;
+      border-radius: 12px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
     }
-    .item input[type="number"] {
-      width: 60px;
-      padding: 5px;
-      margin-left: 10px;
+
+    .item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     }
+
     .item span {
       font-size: 18px;
-      margin-left: 10px;
+      margin-bottom: 10px;
+      color: #333;
     }
+
+    .item input,
+    .item select {
+      font-size: 16px;
+      padding: 8px;
+      margin: 8px 0;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      transition: border-color 0.3s ease;
+    }
+
+    .item input:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
     .item button {
-      background-color: #ff5722;
+      background-color: #ff4d4d;
       color: white;
-      padding: 5px 15px;
-      font-size: 14px;
+      padding: 10px;
+      font-size: 16px;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
+
     .item button:hover {
-      background-color: #e64a19;
+      background-color: #e60000;
     }
-    .action-buttons {
-      margin-top: 20px;
+
+    #total {
+      font-size: 20px;
+      font-weight: bold;
+      color: #007bff;
+      margin-top: 30px;
     }
+
     button {
       background-color: #007bff;
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 10px 20px;
+      border-radius: 12px;
+      padding: 12px 25px;
+      margin: 20px;
       font-size: 18px;
       cursor: pointer;
-      margin: 10px;
+      transition: background-color 0.3s ease;
+      width: 200px;
     }
+
     button:hover {
       background-color: #0056b3;
     }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
   </style>
 </head>
 <body>
-  <h1>تفاصيل الملابس المختارة</h1>
-
   <div class="container">
-    <h3>📜 قائمة الملابس</h3>
+    <h1>📝 تعديل الملابس المختارة</h1>
 
-    <div id="selectedItemsList"></div>
+    <div id="itemsList"></div>
 
-    <div class="action-buttons">
-      <button onclick="saveChanges()">💾 حفظ التعديلات</button>
-      <button onclick="goBack()">🔙 الرجوع</button>
-      <button onclick="goNext()">➡️ التالي</button>
-    </div>
+    <p id="total"></p>
+
+    <button onclick="saveChanges()">💾 حفظ التعديلات</button>
+    <button onclick="goBack()">🔙 الرجوع</button>
   </div>
 
   <script>
-    // استرجاع العناصر من localStorage
     let selectedItems = JSON.parse(localStorage.getItem("selectedItems")) || [];
 
-    // عرض العناصر في الصفحة
     function displayItems() {
-      const itemsList = document.getElementById("selectedItemsList");
-      itemsList.innerHTML = ""; // إعادة تعيين العناصر
+      const itemsList = document.getElementById("itemsList");
+      itemsList.innerHTML = "";
 
       selectedItems.forEach((item, index) => {
         itemsList.innerHTML += `
           <div class="item">
             <span>${item}</span>
-            <input type="number" value="1" min="1" id="quantity-${index}" onchange="updateItemQuantity(${index})">
-            <input type="text" value="${item}" id="name-${index}" onchange="updateItemName(${index})">
-            <input type="number" value="10" min="0" id="price-${index}" onchange="updateItemPrice(${index})">
+            <input type="number" id="quantity${index}" value="1" min="1" placeholder="الكمية" />
+            <input type="number" id="price${index}" value="10" min="0" placeholder="السعر" />
+            <input type="text" id="name${index}" value="${item}" placeholder="اسم العنصر" />
             <button onclick="removeItem(${index})">❌ حذف</button>
           </div>
         `;
       });
+
+      calculateTotal();
     }
 
-    // تحديث الكمية عند التغيير
-    function updateItemQuantity(index) {
-      const quantity = document.getElementById(`quantity-${index}`).value;
-      console.log(`تم تغيير الكمية للعنصر ${selectedItems[index]} إلى ${quantity}`);
-      // يمكن استخدام القيمة لتحديث المجموع أو إجراء تعديلات أخرى حسب الحاجة
+    function calculateTotal() {
+      let total = 0;
+      selectedItems.forEach((item, index) => {
+        const quantity = document.getElementById(`quantity${index}`).value;
+        const price = document.getElementById(`price${index}`).value;
+        total += quantity * price;
+      });
+      document.getElementById("total").textContent = `المجموع: ${total} درهم`;
     }
 
-    // تحديث الاسم عند التغيير
-    function updateItemName(index) {
-      const name = document.getElementById(`name-${index}`).value;
-      selectedItems[index] = name; // تغيير اسم العنصر في المصفوفة
-      displayItems(); // إعادة عرض العناصر
-    }
-
-    // تحديث السعر عند التغيير
-    function updateItemPrice(index) {
-      const price = document.getElementById(`price-${index}`).value;
-      console.log(`تم تغيير السعر للعنصر ${selectedItems[index]} إلى ${price} درهم`);
-      // يمكن استخدام هذه القيمة في حساب المجموع
-    }
-
-    // حذف عنصر
-    function removeItem(index) {
-      selectedItems.splice(index, 1); // إزالة العنصر
-      displayItems(); // إعادة عرض العناصر بعد التعديل
-    }
-
-    // حفظ التعديلات
     function saveChanges() {
+      selectedItems = selectedItems.map((item, index) => {
+        const quantity = document.getElementById(`quantity${index}`).value;
+        const price = document.getElementById(`price${index}`).value;
+        const name = document.getElementById(`name${index}`).value;
+        return { name, quantity, price };
+      });
       localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
       alert("تم حفظ التعديلات!");
     }
 
-    // العودة إلى الصفحة السابقة
+    function removeItem(index) {
+      selectedItems.splice(index, 1);
+      localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+      displayItems();
+    }
+
     function goBack() {
       window.location.href = "categories.html";
     }
 
-    // الانتقال إلى الصفحة التالية
-    function goNext() {
-      window.location.href = "nextPage.html"; // حدد اسم الصفحة التالية هنا
-    }
-
-    // عرض العناصر عند تحميل الصفحة
-    window.onload = displayItems;
+    displayItems();
   </script>
 </body>
 </html>
