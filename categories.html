@@ -104,6 +104,37 @@
             color: #f4f4f4;
         }
 
+        .cart-container {
+            margin-top: 20px;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .cart-item span {
+            font-size: 1rem;
+        }
+
+        .cart-item button {
+            background-color: #dc3545;
+            padding: 5px 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cart-item button:hover {
+            background-color: #c82333;
+        }
+
         @keyframes zoomIn {
             from {
                 transform: scale(0);
@@ -132,6 +163,11 @@
 
         <div class="total-container" id="totalContainer">
             <span>المجموع: </span><span id="totalPrice">0</span> درهم
+        </div>
+
+        <div class="cart-container" id="cartContainer">
+            <h3>الملابس المختارة:</h3>
+            <div id="cartItems"></div>
         </div>
     </div>
 
@@ -201,54 +237,60 @@
                 { name: 'حذاء رياضي نسائي', price: 200 },
                 { name: 'حذاء أطفال', price: 100 },
                 { name: 'جزمة شتوي', price: 350 },
-                { name: 'حذاء برباط', price: 180 },
-                { name: 'حذاء بكعب', price: 220 },
-                { name: 'صندل أطفال', price: 80 },
-                { name: 'حذاء كاجوال', price: 190 },
-                { name: 'حذاء مكتبي', price: 210 }
+                { name: 'صندل أطفال', price: 80 }
             ]
         };
 
+        let selectedItems = [];
+        let totalPrice = 0;
+
         function showItems(category) {
-            const container = document.getElementById('itemsContainer');
-            container.innerHTML = ''; // تنظيف المحتوى السابق
+            const itemsContainer = document.getElementById('itemsContainer');
+            itemsContainer.innerHTML = ''; // Clear previous items
             const items = itemsData[category];
 
             items.forEach(item => {
-                const itemDiv = document.createElement('div');
-                itemDiv.classList.add('item');
-                itemDiv.innerHTML = `
+                const itemElement = document.createElement('div');
+                itemElement.classList.add('item');
+                itemElement.innerHTML = `
                     <span>${item.name}</span>
-                    <button onclick="addItem('${category}', '${item.name}', ${item.price})">إضافة</button>
+                    <span>${item.price} درهم</span>
+                    <button onclick="addItem('${item.name}', ${item.price})">أضف</button>
                 `;
-                container.appendChild(itemDiv);
+                itemsContainer.appendChild(itemElement);
             });
 
-            container.style.display = 'block'; // عرض العناصر
+            itemsContainer.style.display = 'block';
         }
 
-        function addItem(category, name, price) {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-            const existingItem = cart.find(item => item.name === name);
-            if (existingItem) {
-                existingItem.quantity++;
-            } else {
-                cart.push({ name, price, quantity: 1 });
-            }
-
-            localStorage.setItem('cart', JSON.stringify(cart));
-            updateTotalPrice();
+        function addItem(name, price) {
+            selectedItems.push({ name, price, quantity: 1 });
+            updateCart();
         }
 
-        function updateTotalPrice() {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        function updateCart() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            cartItemsContainer.innerHTML = '';
+            totalPrice = 0;
+
+            selectedItems.forEach((item, index) => {
+                totalPrice += item.price * item.quantity;
+                const cartItemElement = document.createElement('div');
+                cartItemElement.classList.add('cart-item');
+                cartItemElement.innerHTML = `
+                    <span>${item.name} - ${item.quantity} × ${item.price} درهم</span>
+                    <button onclick="removeItem(${index})">حذف</button>
+                `;
+                cartItemsContainer.appendChild(cartItemElement);
+            });
+
             document.getElementById('totalPrice').textContent = totalPrice;
         }
 
-        window.onload = updateTotalPrice;
+        function removeItem(index) {
+            selectedItems.splice(index, 1);
+            updateCart();
+        }
     </script>
-
 </body>
-</html>
+    </html>
