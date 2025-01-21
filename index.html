@@ -3,85 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مصبنة مشاء الله - دخول</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <title>مصبنة مشاء الله</title>
     <style>
         body {
-            font-family: 'Tajawal', sans-serif;
-            direction: rtl;
-            background: linear-gradient(to right, #e6f2ff, #b3d9ff);
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            color: #003366;
+            margin: 0;
+            padding: 0;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            overflow: hidden;
         }
-        .login-container {
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-            text-align: center;
-            animation: fadeInUp 1s ease-out;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .login-container h2 {
-            color: #004080;
+
+        h1 {
+            font-size: 2.5rem;
             margin-bottom: 20px;
+            animation: fadeIn 2s ease-in-out;
         }
-        input[type="password"] {
-            width: 100%;
-            padding: 15px;
-            margin: 10px 0;
-            border: 2px solid #007bff;
-            border-radius: 25px;
-            background-color: #e6f2ff;
-            color: #333;
-            font-size: 16px;
+
+        input {
+            padding: 10px;
+            width: 250px;
+            font-size: 1rem;
+            border: 2px solid #003366;
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
-        input[type="password"]:focus {
+
+        input:focus {
             outline: none;
-            border-color: #0056b3;
+            border-color: #0073e6;
         }
+
         button {
-            width: 100%;
-            padding: 15px;
-            background-color: #007bff;
+            padding: 10px 20px;
+            font-size: 1rem;
             color: white;
+            background-color: #0073e6;
             border: none;
-            border-radius: 25px;
+            border-radius: 5px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 18px;
+            transition: background-color 0.3s ease;
         }
+
         button:hover {
-            background-color: #0056b3;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            background-color: #005bb5;
         }
-        .emoji {
-            font-size: 24px;
+
+        .error-message {
+            color: red;
+            font-size: 1rem;
+            margin-top: 10px;
+            display: none;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .error-message span {
+            font-size: 1.5rem;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateX(0);
+            }
+            25%, 75% {
+                transform: translateX(-5px);
+            }
+            50% {
+                transform: translateX(5px);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="login-container animate__animated animate__fadeInDown">
-        <h2><span class="emoji">🔑</span> أدخل الكود للدخول</h2>
-        <input type="password" id="accessCode" placeholder="الكود مثل: 202501">
-        <button onclick="checkAccessCode()">دخول <span class="emoji">➡️</span></button>
+    <h1>🔒 أهلاً بك في <span style="color: #0073e6;">مصبنة مشاء الله</span></h1>
+    <p>من فضلك أدخل الكود السري للمتابعة</p>
+    <input type="password" id="secretCode" placeholder="أدخل الكود السري هنا" />
+    <button onclick="verifyCode()">تأكيد</button>
+    <div class="error-message" id="errorMessage">
+        ❌ الكود غير صحيح <span>😡</span>
     </div>
 
     <script>
-        function checkAccessCode() {
-            const code = document.getElementById('accessCode').value;
-            if (code === "202501") {
-                window.location.href = 'customer.html';
+        function verifyCode() {
+            const correctCode = "202501";
+            const enteredCode = document.getElementById('secretCode').value;
+            const errorMessage = document.getElementById('errorMessage');
+
+            if (enteredCode === correctCode) {
+                // الانتقال إلى الصفحة الثانية
+                window.location.href = "option.html";
             } else {
-                alert('كود غير صحيح');
+                // عرض رسالة الخطأ
+                errorMessage.style.display = "block";
+                setTimeout(() => {
+                    errorMessage.style.display = "none";
+                }, 3000);
             }
         }
     </script>
