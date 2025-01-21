@@ -1,111 +1,150 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إدارة الزبون - مصبنة مشاء الله</title>
-    <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            text-align: center;
-            background-color: #f0f8ff;
-        }
-
-        h1, h2 {
-            color: #007bff;
-        }
-
-        .customer-info {
-            margin: 20px auto;
-            padding: 15px;
-            background-color: #e8f4fa;
-            border-radius: 8px;
-            width: 80%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .options button {
-            margin: 10px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .options button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مصبنة مشاء الله - اختيار الملابس</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f0f8ff;
+      color: #333;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      color: #007bff;
+      margin-top: 20px;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .category {
+      margin-top: 30px;
+    }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin: 5px;
+      background-color: #fff;
+    }
+    .item span {
+      font-size: 16px;
+    }
+    .item button {
+      background-color: red;
+      padding: 5px;
+      font-size: 14px;
+    }
+    #selectedItems {
+      margin-top: 20px;
+    }
+    #total {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div class="customer-page">
-        <h1>مصبنة مشاء الله</h1>
-        <h2>إدارة الزبون</h2>
+  <h1>👕 مصبنة مشاء الله</h1>
+  <h3>إدارة الزبون</h3>
 
-        <!-- اسم الزبون -->
-        <div class="customer-info">
-            <p><strong>الزبون:</strong> <span id="customer-name"></span></p>
-        </div>
+  <div class="category">
+    <button onclick="showItems('رجالية', '👔')">👔 رجالية</button>
+    <button onclick="showItems('نسائية', '👗')">👗 نسائية</button>
+    <button onclick="showItems('أطفال', '🧒')">🧒 أطفال</button>
+    <button onclick="showItems('أفرشة', '🛏️')">🛏️ أفرشة</button>
+    <button onclick="showItems('أحذية', '👟')">👟 أحذية</button>
+  </div>
 
-        <!-- الخيارات المتاحة -->
-        <div class="options">
-            <button onclick="goToCategories()">اختيار الملابس</button>
-            <button onclick="editCustomerName()">تعديل اسم الزبون</button>
-            <button onclick="deleteCustomer()">حذف الزبون</button>
-            <button onclick="goBack()">الرجوع</button>
-        </div>
-    </div>
+  <div id="itemsList"></div>
 
-    <!-- سكريبت إدارة الزبون -->
-    <script>
-        // جلب اسم الزبون من localStorage
-        let customerData = JSON.parse(localStorage.getItem("selectedCustomer"));
-        const customerNameElement = document.getElementById("customer-name");
+  <h2 id="selectedItemsHeader" style="display:none;">📝 الملابس المختارة</h2>
+  <div id="selectedItems"></div>
+  <p id="total"></p>
 
-        if (customerData && customerData.name) {
-            customerNameElement.textContent = customerData.name;
-        } else {
-            alert("لا يوجد زبون محدد! سيتم الرجوع إلى الصفحة السابقة.");
-            window.location.href = "customer-selection.html";
-        }
+  <button onclick="saveAndProceed()">💾 حفظ الملابس</button>
+  <button onclick="goBack()">🔙 الرجوع</button>
 
-        // الانتقال إلى صفحة الفئات
-        function goToCategories() {
-            window.location.href = "categories.html";
-        }
+  <script>
+    const categories = {
+      "رجالية": ["👔 قميص", "👖 بنطال", "🧥 جاكيت", "🎩 قبعة", "👕 تيشرت", "🩳 شورت", "🧦 جوارب", "👞 حذاء", "👙 ملابس داخلية", "🧣 وشاح"],
+      "نسائية": ["👗 فستان", "👜 حقيبة", "👡 صندل", "👒 قبعة", "🩴 شبشب", "👕 تيشرت", "👚 بلوزة", "👖 بنطال", "🧥 معطف", "🧤 قفازات"],
+      "أطفال": ["🧒 بدلة", "👕 تيشرت", "👖 بنطال", "🩳 شورت", "👟 حذاء", "🧥 جاكيت", "🧢 قبعة", "🧦 جوارب", "🧤 قفازات", "👒 قبعة شمس"],
+      "أفرشة": ["🛏️ لحاف", "🛌 وسادة", "🛏️ غطاء سرير", "🛋️ غطاء أريكة", "🛏️ بطانية", "🧺 منشفة", "🛁 ستارة حمام", "🛏️ مرتبة", "🛋️ وسادة أريكة", "🧴 غطاء طاولة"],
+      "أحذية": ["👟 رياضي", "👞 رسمي", "👠 كعب عالي", "🩰 حذاء باليه", "👢 بوت", "👡 صندل", "🩴 شبشب", "👞 لوفر", "🥿 حذاء مسطح", "👒 قبعة متناسقة"]
+    };
 
-        // تعديل اسم الزبون
-        function editCustomerName() {
-            let newName = prompt("أدخل الاسم الجديد للزبون:", customerData.name);
-            if (newName) {
-                customerData.name = newName;
-                localStorage.setItem("selectedCustomer", JSON.stringify(customerData));
-                customerNameElement.textContent = customerData.name;
-                alert("تم تعديل اسم الزبون بنجاح!");
-            }
-        }
+    let selectedItems = [];
 
-        // حذف الزبون
-        function deleteCustomer() {
-            if (confirm("هل أنت متأكد أنك تريد حذف هذا الزبون؟")) {
-                let customers = JSON.parse(localStorage.getItem("customers")) || [];
-                customers = customers.filter(c => c.name !== customerData.name);
-                localStorage.setItem("customers", JSON.stringify(customers));
-                localStorage.removeItem("selectedCustomer");
-                alert("تم حذف الزبون بنجاح!");
-                window.location.href = "customer-selection.html";
-            }
-        }
+    function showItems(category, emoji) {
+      const itemsList = document.getElementById("itemsList");
+      itemsList.innerHTML = `<h2>${emoji} ${category}</h2>`;
+      categories[category].forEach((item, index) => {
+        itemsList.innerHTML += `
+          <div class="item">
+            <span>${item}</span>
+            <button onclick="addItem('${item}')">إضافة</button>
+          </div>
+        `;
+      });
+    }
 
-        // الرجوع إلى صفحة اختيار الزبون
-        function goBack() {
-            window.location.href = "customer-selection.html";
-        }
-    </script>
+    function addItem(item) {
+      selectedItems.push(item);
+      updateSelectedItems();
+    }
+
+    function updateSelectedItems() {
+      const selectedItemsDiv = document.getElementById("selectedItems");
+      selectedItemsDiv.innerHTML = "";
+      selectedItems.forEach((item, index) => {
+        selectedItemsDiv.innerHTML += `
+          <div class="item">
+            <span>${item}</span>
+            <button onclick="removeItem(${index})">❌ حذف</button>
+          </div>
+        `;
+      });
+      document.getElementById("selectedItemsHeader").style.display = selectedItems.length > 0 ? "block" : "none";
+      calculateTotal();
+    }
+
+    function removeItem(index) {
+      selectedItems.splice(index, 1);
+      updateSelectedItems();
+    }
+
+    function calculateTotal() {
+      const total = selectedItems.length * 10; // 10 دراهم لكل قطعة كمثال
+      document.getElementById("total").textContent = `المجموع: ${total} درهم`;
+    }
+
+    function saveAndProceed() {
+      localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+      alert("تم حفظ الملابس!");
+      // الانتقال إلى الصفحة التالية
+    }
+
+    function goBack() {
+      window.location.href = "option.html";
+    }
+  </script>
 </body>
 </html>
