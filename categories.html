@@ -5,6 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>إدارة الزبون - مصبنة مشاء الله</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+        }
+
+        h1, h2 {
+            color: #007bff;
+        }
+
+        .customer-info {
+            margin: 20px auto;
+            padding: 15px;
+            background-color: #e8f4fa;
+            border-radius: 8px;
+            width: 80%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .options button {
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .options button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
     <div class="customer-page">
@@ -12,7 +48,7 @@
         <h2>إدارة الزبون</h2>
 
         <!-- اسم الزبون -->
-        <div id="customer-info">
+        <div class="customer-info">
             <p><strong>الزبون:</strong> <span id="customer-name"></span></p>
         </div>
 
@@ -28,11 +64,11 @@
     <!-- سكريبت إدارة الزبون -->
     <script>
         // جلب اسم الزبون من localStorage
-        let customerName = localStorage.getItem("selectedCustomer");
+        let customerData = JSON.parse(localStorage.getItem("selectedCustomer"));
         const customerNameElement = document.getElementById("customer-name");
 
-        if (customerName) {
-            customerNameElement.textContent = customerName;
+        if (customerData && customerData.name) {
+            customerNameElement.textContent = customerData.name;
         } else {
             alert("لا يوجد زبون محدد! سيتم الرجوع إلى الصفحة السابقة.");
             window.location.href = "customer-selection.html";
@@ -45,11 +81,11 @@
 
         // تعديل اسم الزبون
         function editCustomerName() {
-            let newName = prompt("أدخل الاسم الجديد للزبون:", customerName);
+            let newName = prompt("أدخل الاسم الجديد للزبون:", customerData.name);
             if (newName) {
-                customerName = newName;
-                localStorage.setItem("selectedCustomer", customerName);
-                customerNameElement.textContent = customerName;
+                customerData.name = newName;
+                localStorage.setItem("selectedCustomer", JSON.stringify(customerData));
+                customerNameElement.textContent = customerData.name;
                 alert("تم تعديل اسم الزبون بنجاح!");
             }
         }
@@ -58,7 +94,7 @@
         function deleteCustomer() {
             if (confirm("هل أنت متأكد أنك تريد حذف هذا الزبون؟")) {
                 let customers = JSON.parse(localStorage.getItem("customers")) || [];
-                customers = customers.filter(c => c !== customerName);
+                customers = customers.filter(c => c.name !== customerData.name);
                 localStorage.setItem("customers", JSON.stringify(customers));
                 localStorage.removeItem("selectedCustomer");
                 alert("تم حذف الزبون بنجاح!");
