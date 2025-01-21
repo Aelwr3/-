@@ -153,6 +153,67 @@
     button[type="submit"]:hover {
       background-color: #218838;
     }
+
+    /* نافذة منبثقة */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-100%);
+      }
+      to {
+        transform: translateY(0);
+      }
+    }
+
+    .modal-header {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .modal-body {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .modal-footer {
+      text-align: center;
+    }
+
+    .close {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -195,6 +256,22 @@
     © 2025 مصبنة مشاء الله - جميع الحقوق محفوظة
   </div>
 
+  <!-- نافذة منبثقة لعرض تفاصيل الفاتورة -->
+  <div id="invoiceModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        تفاصيل الفاتورة
+        <span class="close" onclick="closeModal()">&times;</span>
+      </div>
+      <div class="modal-body" id="modalBody">
+        <!-- سيتم إضافة تفاصيل الفاتورة هنا -->
+      </div>
+      <div class="modal-footer">
+        <button onclick="closeModal()">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // استرجاع تفاصيل الفاتورة من localStorage
     const invoiceNumber = localStorage.getItem("invoiceNumber");
@@ -220,11 +297,28 @@
     function searchInvoice() {
       const searchNumber = document.getElementById("searchInvoiceNumber").value;
       if (searchNumber === invoiceNumber) {
-        alert("تم العثور على الفاتورة");
-        // هنا يمكن إضافة عرض الفاتورة بالتفاصيل
+        openModal();
       } else {
         alert("رقم الفاتورة غير موجود.");
       }
+    }
+
+    // فتح نافذة منبثقة
+    function openModal() {
+      const modalBody = document.getElementById("modalBody");
+      modalBody.innerHTML = `
+        <p><strong>رقم الفاتورة:</strong> ${invoiceNumber}</p>
+        <p><strong>تاريخ الفاتورة:</strong> ${invoiceDate}</p>
+        <p><strong>حالة الدفع:</strong> ${paymentStatusText}</p>
+        <p><strong>المجموع:</strong> ${totalAmount} درهم</p>
+        <p><strong>المبلغ المدفوع جزئيًا:</strong> ${partialAmount} درهم</p>
+      `;
+      document.getElementById("invoiceModal").style.display = "block";
+    }
+
+    // غلق نافذة منبثقة
+    function closeModal() {
+      document.getElementById("invoiceModal").style.display = "none";
     }
 
     // وظيفة الخروج
