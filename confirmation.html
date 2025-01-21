@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>تأكيد الدفع - مصبنة مشاء الله</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Cairo', sans-serif;
@@ -20,6 +21,19 @@
       border-radius: 12px;
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
       overflow: hidden;
+      padding: 20px;
+      animation: fadeInUp 1s ease-in-out;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     .header {
@@ -35,10 +49,11 @@
       font-size: 20px;
       color: #28a745;
       font-weight: bold;
+      margin-top: 20px;
     }
 
     .store-name {
-      font-size: 22px;
+      font-size: 26px;
       font-weight: bold;
       color: #007bff;
       margin: 20px 0;
@@ -46,25 +61,19 @@
       animation: fadeIn 2s ease-in-out;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
-    }
-
     .invoice-table {
       width: 100%;
       border-collapse: collapse;
       margin: 20px 0;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     th, td {
       text-align: center;
       padding: 12px;
       font-size: 16px;
+      border: 1px solid #ddd;
     }
 
     th {
@@ -75,24 +84,23 @@
 
     td {
       background-color: #f9f9f9;
-      border-bottom: 1px solid #ddd;
     }
 
     .payment-status {
       font-size: 18px;
       font-weight: bold;
-      color: #fff;
       padding: 8px 15px;
       border-radius: 5px;
-      margin-top: 10px;
     }
 
     .paid {
-      background-color: #28a745; /* الأخضر */
+      background-color: #28a745;
+      color: #fff;
     }
 
-    .pending {
-      background-color: #dc3545; /* الأحمر */
+    .partial {
+      background-color: #dc3545;
+      color: #fff;
     }
 
     .buttons {
@@ -154,7 +162,6 @@
       background-color: #218838;
     }
 
-    /* نافذة منبثقة */
     .modal {
       display: none;
       position: fixed;
@@ -163,7 +170,6 @@
       top: 0;
       width: 100%;
       height: 100%;
-      overflow: auto;
       background-color: rgba(0, 0, 0, 0.4);
     }
 
@@ -173,61 +179,26 @@
       padding: 20px;
       border-radius: 10px;
       width: 80%;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      animation: slideIn 0.5s ease;
-    }
-
-    @keyframes slideIn {
-      from {
-        transform: translateY(-100%);
-      }
-      to {
-        transform: translateY(0);
-      }
-    }
-
-    .modal-header {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .modal-body {
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
-
-    .modal-footer {
-      text-align: center;
     }
 
     .close {
-      color: #aaa;
-      font-size: 28px;
+      float: right;
+      font-size: 24px;
       font-weight: bold;
-      text-decoration: none;
+      color: #aaa;
     }
 
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
+    .close:hover {
+      color: #000;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-
   <div class="confirmation-container">
     <div class="header">تأكيد الدفع - مصبنة مشاء الله</div>
-
-    <div class="message">
-      شكراً على اختيارك مصبنة مشاء الله! تم تسجيل طلبك بنجاح.
-    </div>
-
-    <div class="store-name">
-      مصبنة مشاء الله
-    </div>
+    <div class="message">شكراً لاختياركم مصبنة مشاء الله!</div>
+    <div class="store-name">مصبنة مشاء الله</div>
 
     <table class="invoice-table">
       <thead>
@@ -237,14 +208,12 @@
           <th>حالة الدفع</th>
         </tr>
       </thead>
-      <tbody id="invoiceDetails">
-        <!-- سيتم إضافة التفاصيل هنا تلقائيًا -->
-      </tbody>
+      <tbody id="invoiceDetails"></tbody>
     </table>
 
     <div class="search-container">
-      <input type="text" id="searchInvoiceNumber" placeholder="أدخل رقم الفاتورة للبحث">
-      <button type="submit" onclick="searchInvoice()">بحث</button>
+      <input type="text" id="searchInvoice" placeholder="أدخل رقم الفاتورة">
+      <button onclick="searchInvoice()">بحث</button>
     </div>
 
     <div class="buttons">
@@ -252,81 +221,42 @@
     </div>
   </div>
 
-  <div class="footer">
-    © 2025 مصبنة مشاء الله - جميع الحقوق محفوظة
-  </div>
-
-  <!-- نافذة منبثقة لعرض تفاصيل الفاتورة -->
-  <div id="invoiceModal" class="modal">
-    <div class="modal-content">
-      <div class="modal-header">
-        تفاصيل الفاتورة
-        <span class="close" onclick="closeModal()">&times;</span>
-      </div>
-      <div class="modal-body" id="modalBody">
-        <!-- سيتم إضافة تفاصيل الفاتورة هنا -->
-      </div>
-      <div class="modal-footer">
-        <button onclick="closeModal()">إغلاق</button>
-      </div>
-    </div>
-  </div>
-
   <script>
-    // استرجاع تفاصيل الفاتورة من localStorage
-    const invoiceNumber = localStorage.getItem("invoiceNumber");
-    const invoiceDate = localStorage.getItem("invoiceDate");
-    const totalAmount = parseFloat(localStorage.getItem("totalAmount")) || 0;
-    const partialAmount = parseFloat(localStorage.getItem("partialAmount")) || 0;
-    const paymentStatus = (partialAmount >= totalAmount) ? "كامل" : "جزئي";
+    // تفاصيل الفاتورة
+    const invoices = JSON.parse(localStorage.getItem('invoices')) || [];
+    const invoiceTable = document.getElementById('invoiceDetails');
+    const searchInput = document.getElementById('searchInvoice');
 
-    // تحديث حالة الدفع
-    let paymentStatusClass = (paymentStatus === "كامل") ? "paid" : "pending";
-    let paymentStatusText = (paymentStatus === "كامل") ? "تم الدفع بالكامل" : `تم دفع جزئي - المبلغ المتبقي: ${totalAmount - partialAmount} درهم`;
+    function renderInvoices() {
+      invoiceTable.innerHTML = '';
+      invoices.forEach(invoice => {
+        const statusClass = invoice.remaining === 0 ? 'paid' : 'partial';
+        const row = `
+          <tr>
+            <td>${invoice.number}</td>
+            <td>${invoice.date}</td>
+            <td class="payment-status ${statusClass}">${invoice.remaining === 0 ? 'تم الدفع' : `متبقي: ${invoice.remaining} درهم`}</td>
+          </tr>
+        `;
+        invoiceTable.innerHTML += row;
+      });
+    }
 
-    // إضافة التفاصيل إلى الجدول
-    document.getElementById("invoiceDetails").innerHTML = `
-      <tr>
-        <td>${invoiceNumber}</td>
-        <td>${invoiceDate}</td>
-        <td><span class="payment-status ${paymentStatusClass}">${paymentStatusText}</span></td>
-      </tr>
-    `;
-
-    // وظيفة البحث عن الفاتورة
     function searchInvoice() {
-      const searchNumber = document.getElementById("searchInvoiceNumber").value;
-      if (searchNumber === invoiceNumber) {
-        openModal();
+      const number = searchInput.value;
+      const invoice = invoices.find(inv => inv.number === number);
+      if (invoice) {
+        alert(`تفاصيل الفاتورة رقم ${invoice.number}: المجموع: ${invoice.total}, المدفوع: ${invoice.paid}, المتبقي: ${invoice.remaining}`);
       } else {
-        alert("رقم الفاتورة غير موجود.");
+        alert('الفاتورة غير موجودة.');
       }
     }
 
-    // فتح نافذة منبثقة
-    function openModal() {
-      const modalBody = document.getElementById("modalBody");
-      modalBody.innerHTML = `
-        <p><strong>رقم الفاتورة:</strong> ${invoiceNumber}</p>
-        <p><strong>تاريخ الفاتورة:</strong> ${invoiceDate}</p>
-        <p><strong>حالة الدفع:</strong> ${paymentStatusText}</p>
-        <p><strong>المجموع:</strong> ${totalAmount} درهم</p>
-        <p><strong>المبلغ المدفوع جزئيًا:</strong> ${partialAmount} درهم</p>
-      `;
-      document.getElementById("invoiceModal").style.display = "block";
-    }
-
-    // غلق نافذة منبثقة
-    function closeModal() {
-      document.getElementById("invoiceModal").style.display = "none";
-    }
-
-    // وظيفة الخروج
     function logout() {
-      localStorage.clear();  // مسح بيانات الفاتورة من localStorage
-      window.location.href = "option.html";  // العودة إلى صفحة إدخال الزبون
+      window.location.href = 'option.html';
     }
-  </script>
 
+    renderInvoices();
+  </script>
 </body>
 </html>
