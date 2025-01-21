@@ -3,260 +3,213 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>تأكيد الدفع - مصبنة مشاء الله</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600&display=swap" rel="stylesheet">
+  <title>شكراً على اختيارنا</title>
   <style>
     body {
       font-family: 'Cairo', sans-serif;
-      background: linear-gradient(to bottom, #e3f2fd, #bbdefb);
+      background: linear-gradient(to bottom, #bbdefb, #e3f2fd);
       margin: 0;
       padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .container {
       text-align: center;
-    }
-
-    .confirmation-container {
-      max-width: 800px;
-      margin: 40px auto;
       background-color: #ffffff;
-      border-radius: 12px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      overflow: hidden;
-      padding: 20px;
-      animation: fadeInUp 1s ease-in-out;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      animation: fadeIn 1.5s ease-in-out;
+      width: 90%;
+      max-width: 600px;
     }
 
-    @keyframes fadeInUp {
+    @keyframes fadeIn {
       from {
-        transform: translateY(50px);
         opacity: 0;
+        transform: scale(0.8);
       }
       to {
-        transform: translateY(0);
         opacity: 1;
+        transform: scale(1);
       }
     }
 
-    .header {
-      background-color: #007bff;
-      color: white;
-      padding: 20px;
+    h1 {
+      color: #007bff;
+      margin-bottom: 20px;
       font-size: 24px;
-      font-weight: bold;
     }
 
-    .message {
-      padding: 20px;
-      font-size: 20px;
-      color: #28a745;
-      font-weight: bold;
+    p {
+      font-size: 18px;
+      color: #555;
+    }
+
+    .table-container {
       margin-top: 20px;
     }
 
-    .store-name {
-      font-size: 26px;
-      font-weight: bold;
-      color: #007bff;
-      margin: 20px 0;
-      text-transform: uppercase;
-      animation: fadeIn 2s ease-in-out;
-    }
-
-    .invoice-table {
+    table {
       width: 100%;
       border-collapse: collapse;
-      margin: 20px 0;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
 
     th, td {
+      padding: 10px;
       text-align: center;
-      padding: 12px;
-      font-size: 16px;
       border: 1px solid #ddd;
+      font-size: 16px;
     }
 
     th {
       background-color: #007bff;
       color: white;
-      border-bottom: 3px solid #ddd;
     }
 
     td {
       background-color: #f9f9f9;
     }
 
-    .payment-status {
-      font-size: 18px;
-      font-weight: bold;
-      padding: 8px 15px;
-      border-radius: 5px;
-    }
-
     .paid {
-      background-color: #28a745;
-      color: #fff;
+      color: green;
+      font-weight: bold;
     }
 
-    .partial {
-      background-color: #dc3545;
-      color: #fff;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: center;
-      padding: 20px;
+    .due {
+      color: red;
+      font-weight: bold;
     }
 
     button {
+      margin-top: 20px;
       background-color: #007bff;
       color: white;
+      padding: 10px 20px;
       border: none;
-      border-radius: 8px;
-      padding: 12px 25px;
+      border-radius: 5px;
       font-size: 16px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: background-color 0.3s ease;
     }
 
     button:hover {
       background-color: #0056b3;
-      transform: scale(1.05);
-    }
-
-    .footer {
-      text-align: center;
-      font-size: 14px;
-      color: #777;
-      padding: 10px;
-      background-color: #e3f2fd;
     }
 
     .search-container {
-      margin: 20px 0;
-      display: flex;
-      justify-content: center;
+      margin-top: 20px;
     }
 
-    input[type="text"] {
-      padding: 10px;
+    input {
+      padding: 8px;
       font-size: 16px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      width: 250px;
       margin-right: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
 
-    button[type="submit"] {
+    .search-button {
       padding: 10px 20px;
-      font-size: 16px;
-      background-color: #28a745;
+      background-color: #007bff;
       color: white;
       border: none;
       border-radius: 5px;
+      font-size: 16px;
       cursor: pointer;
     }
 
-    button[type="submit"]:hover {
-      background-color: #218838;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 1;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.4);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 10px;
-      width: 80%;
-    }
-
-    .close {
-      float: right;
-      font-size: 24px;
-      font-weight: bold;
-      color: #aaa;
-    }
-
-    .close:hover {
-      color: #000;
-      cursor: pointer;
+    .search-button:hover {
+      background-color: #0056b3;
     }
   </style>
 </head>
 <body>
-  <div class="confirmation-container">
-    <div class="header">تأكيد الدفع - مصبنة مشاء الله</div>
-    <div class="message">شكراً لاختياركم مصبنة مشاء الله!</div>
-    <div class="store-name">مصبنة مشاء الله</div>
-
-    <table class="invoice-table">
-      <thead>
-        <tr>
-          <th>رقم الفاتورة</th>
-          <th>تاريخ الفاتورة</th>
-          <th>حالة الدفع</th>
-        </tr>
-      </thead>
-      <tbody id="invoiceDetails"></tbody>
-    </table>
+  <div class="container">
+    <h1>شكراً على اختيار مصبنة مشاء الله</h1>
+    <p>فاتورتك جاهزة، وشكرًا على ثقتك بنا.</p>
 
     <div class="search-container">
-      <input type="text" id="searchInvoice" placeholder="أدخل رقم الفاتورة">
-      <button onclick="searchInvoice()">بحث</button>
+      <input type="text" id="searchInvoiceNumber" placeholder="أدخل رقم الفاتورة للبحث">
+      <button class="search-button" onclick="searchInvoice()">بحث</button>
     </div>
 
-    <div class="buttons">
-      <button onclick="logout()">🔚 الخروج</button>
+    <div class="table-container">
+      <table id="invoiceTable">
+        <thead>
+          <tr>
+            <th>رقم الفاتورة</th>
+            <th>التاريخ</th>
+            <th>حالة الدفع</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="invoiceNumber">--</td>
+            <td id="invoiceDate">--</td>
+            <td id="paymentStatus">--</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+
+    <button onclick="exitPage()">خروج</button>
   </div>
 
   <script>
-    // تفاصيل الفاتورة
-    const invoices = JSON.parse(localStorage.getItem('invoices')) || [];
-    const invoiceTable = document.getElementById('invoiceDetails');
-    const searchInput = document.getElementById('searchInvoice');
+    // استرجاع معلومات الفاتورة
+    const invoiceNumber = localStorage.getItem("invoiceNumber");
+    const invoiceDate = localStorage.getItem("invoiceDate");
+    const paymentStatus = localStorage.getItem("paymentStatus");
 
-    function renderInvoices() {
-      invoiceTable.innerHTML = '';
-      invoices.forEach(invoice => {
-        const statusClass = invoice.remaining === 0 ? 'paid' : 'partial';
-        const row = `
-          <tr>
-            <td>${invoice.number}</td>
-            <td>${invoice.date}</td>
-            <td class="payment-status ${statusClass}">${invoice.remaining === 0 ? 'تم الدفع' : `متبقي: ${invoice.remaining} درهم`}</td>
-          </tr>
-        `;
-        invoiceTable.innerHTML += row;
-      });
+    // تحديث الصفحة بالبيانات
+    document.getElementById("invoiceNumber").textContent = invoiceNumber || "--";
+    document.getElementById("invoiceDate").textContent = invoiceDate || "--";
+
+    const statusCell = document.getElementById("paymentStatus");
+    if (paymentStatus === "مدفوع بالكامل") {
+      statusCell.textContent = paymentStatus;
+      statusCell.classList.add("paid");
+    } else if (paymentStatus === "جزئي") {
+      statusCell.textContent = `المتبقي: ${localStorage.getItem("remainingAmount")} درهم`;
+      statusCell.classList.add("due");
+    } else {
+      statusCell.textContent = "--";
     }
 
+    // وظيفة البحث عن الفاتورة
     function searchInvoice() {
-      const number = searchInput.value;
-      const invoice = invoices.find(inv => inv.number === number);
-      if (invoice) {
-        alert(`تفاصيل الفاتورة رقم ${invoice.number}: المجموع: ${invoice.total}, المدفوع: ${invoice.paid}, المتبقي: ${invoice.remaining}`);
+      const searchNumber = document.getElementById("searchInvoiceNumber").value;
+      const storedInvoiceNumber = localStorage.getItem("invoiceNumber");
+
+      if (searchNumber === storedInvoiceNumber) {
+        // إذا تم العثور على الفاتورة
+        alert("تم العثور على الفاتورة!");
+        document.getElementById("invoiceNumber").textContent = storedInvoiceNumber;
+        document.getElementById("invoiceDate").textContent = invoiceDate;
+        const statusCell = document.getElementById("paymentStatus");
+        if (paymentStatus === "مدفوع بالكامل") {
+          statusCell.textContent = paymentStatus;
+          statusCell.classList.add("paid");
+        } else if (paymentStatus === "جزئي") {
+          statusCell.textContent = `المتبقي: ${localStorage.getItem("remainingAmount")} درهم`;
+          statusCell.classList.add("due");
+        }
       } else {
-        alert('الفاتورة غير موجودة.');
+        // إذا لم يتم العثور على الفاتورة
+        alert("الفاتورة غير موجودة!");
       }
     }
 
-    function logout() {
-      window.location.href = 'option.html';
+    // وظيفة زر الخروج
+    function exitPage() {
+      // العودة إلى صفحة إدخال الزبون
+      window.location.href = "option.html";
     }
-
-    renderInvoices();
   </script>
 </body>
 </html>
