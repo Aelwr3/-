@@ -198,6 +198,205 @@
           `;
           invoiceTable.style.display = "block";
         } else {
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مصبنة مشاء الله - تأكيد الطلب</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #1976d2;
+      margin-top: 20px;
+      font-size: 36px;
+      font-weight: bold;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
+    }
+
+    .message {
+      font-size: 20px;
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 20px;
+    }
+
+    .invoice-table th,
+    .invoice-table td {
+      padding: 12px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    .invoice-table th {
+      background-color: #1976d2;
+      color: white;
+    }
+
+    .status-paid {
+      color: green;
+    }
+
+    .status-partial {
+      color: red;
+    }
+
+    .search-bar {
+      margin: 20px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .search-bar input {
+      padding: 10px;
+      font-size: 16px;
+      width: 300px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .search-bar button {
+      padding: 10px;
+      font-size: 16px;
+      margin-left: 10px;
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .search-bar button:hover {
+      background-color: #0d47a1;
+    }
+
+    .error-message {
+      color: red;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 18px;
+    }
+
+    .actions {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .actions button {
+      padding: 12px 30px;
+      font-size: 18px;
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .actions button:hover {
+      background-color: #0d47a1;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>مصبنة مشاء الله</h1>
+  
+  <div class="container">
+    <div class="message">
+      <p>شكرًا لاختيارك لمصبنتنا. نحن هنا لخدمتك دائمًا!</p>
+    </div>
+
+    <div class="search-bar">
+      <input type="text" id="invoiceNumber" placeholder="أدخل رقم الفاتورة للبحث" />
+      <button onclick="searchInvoice()">بحث</button>
+    </div>
+
+    <div id="error-message" class="error-message" style="display: none;"></div>
+
+    <table id="invoiceTable" class="invoice-table" style="display: none;">
+      <thead>
+        <tr>
+          <th>رقم الفاتورة</th>
+          <th>تاريخ الفاتورة</th>
+          <th>حالة الدفع</th>
+          <th>المبلغ المتبقي</th>
+          <th>عرض الفاتورة</th>
+        </tr>
+      </thead>
+      <tbody id="invoiceDetails"></tbody>
+    </table>
+
+    <div class="actions">
+      <button onclick="goBack()">رجوع</button>
+      <button onclick="goToCustomerInput()">خروج</button>
+    </div>
+  </div>
+
+  <script>
+    // محاكاة بيانات الفواتير
+    const invoices = [
+      { number: "12345", date: "2025-01-20", paidAmount: 50, totalAmount: 100, items: ["قميص", "بنطلون"] },
+      { number: "12346", date: "2025-01-19", paidAmount: 30, totalAmount: 80, items: ["جاكيت", "شورت"] },
+      { number: "12347", date: "2025-01-18", paidAmount: 100, totalAmount: 100, items: ["حذاء"] }
+    ];
+
+    function searchInvoice() {
+      const invoiceNumber = document.getElementById("invoiceNumber").value.trim();
+      const errorMessage = document.getElementById("error-message");
+      const invoiceTable = document.getElementById("invoiceTable");
+      const invoiceDetails = document.getElementById("invoiceDetails");
+
+      // إخفاء الرسالة السابقة
+      errorMessage.style.display = "none";
+      invoiceTable.style.display = "none";
+
+      if (invoiceNumber) {
+        const invoice = invoices.find(item => item.number === invoiceNumber);
+        if (invoice) {
+          invoiceDetails.innerHTML = `
+            <tr>
+              <td>${invoice.number}</td>
+              <td>${invoice.date}</td>
+              <td class="${invoice.paidAmount === invoice.totalAmount ? 'status-paid' : 'status-partial'}">
+                ${invoice.paidAmount === invoice.totalAmount ? 'تم الدفع بالكامل' : 'دفع جزئي'}
+              </td>
+              <td>${invoice.paidAmount === invoice.totalAmount ? '0' : invoice.totalAmount - invoice.paidAmount}</td>
+              <td><button onclick="viewInvoiceDetails('${invoice.number}')">عرض الفاتورة</button></td>
+            </tr>
+          `;
+          invoiceTable.style.display = "block";
+        } else {
           errorMessage.textContent = "عذرًا، الفاتورة غير موجودة. تأكد من الرقم وأعد المحاولة.";
           errorMessage.style.display = "block";
         }
