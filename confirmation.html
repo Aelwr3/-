@@ -41,32 +41,6 @@
       margin-bottom: 30px;
     }
 
-    .invoice-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 20px;
-    }
-
-    .invoice-table th,
-    .invoice-table td {
-      padding: 12px;
-      text-align: center;
-      border: 1px solid #ddd;
-    }
-
-    .invoice-table th {
-      background-color: #1976d2;
-      color: white;
-    }
-
-    .status-paid {
-      color: green;
-    }
-
-    .status-partial {
-      color: red;
-    }
-
     .search-bar {
       margin: 20px 0;
       display: flex;
@@ -215,6 +189,21 @@
       { number: "12347", date: "2025-01-18", paidAmount: 100, totalAmount: 100, items: ["حذاء"] }
     ];
 
+    // حفظ العناصر المختارة في localStorage
+    function saveItems() {
+      const selectedItems = [
+        { name: "قميص", quantity: document.getElementById("item1").value || 0, price: 10 },
+        { name: "بنطلون", quantity: document.getElementById("item2").value || 0, price: 20 }
+      ];
+
+      // تخزين البيانات في localStorage
+      localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
+
+      // التوجيه إلى صفحة تعديل العناصر
+      window.location.href = "saved-items.html";
+    }
+
+    // البحث عن الفاتورة
     function searchInvoice() {
       const invoiceNumber = document.getElementById("invoiceNumber").value.trim();
       const errorMessage = document.getElementById("error-message");
@@ -247,6 +236,7 @@
       }
     }
 
+    // عرض تفاصيل الفاتورة
     function viewInvoiceDetails(invoiceNumber) {
       const invoice = invoices.find(item => item.number === invoiceNumber);
       const popupDetails = document.getElementById("popupDetails");
@@ -265,6 +255,7 @@
       }
     }
 
+    // إغلاق نافذة الفاتورة
     function closePopup() {
       document.getElementById("popup").style.display = "none";
     }
